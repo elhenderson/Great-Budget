@@ -5,7 +5,7 @@ import Dropdown from '../Dropdown/Dropdown';
 
 class Modal extends Component {
   state = {
-    dropdownOpen: true
+    dropdownOpen: false
   }
 
   shouldComponentUpdate (nextProps, nextState) {
@@ -14,12 +14,13 @@ class Modal extends Component {
 
   toggleDropdown = () => {
     this.setState({
-      dropdownOpen: !this.state.dropdownOpen
+      dropdownOpen: true
     })
   }
 
   render() {
-    
+
+  
     return (
       <React.Fragment>
         <Backdrop 
@@ -32,8 +33,8 @@ class Modal extends Component {
             opacity: this.props.show ? '1' : '0'
           }}>
           {this.props.children}
-          <Dropdown isOpen={this.state.dropdownOpen}>
-            Hello
+          <Dropdown isOpen={this.state.dropdownOpen} onClick={this.toggleDropdown}>
+            Click
           </Dropdown>
         </div>
       </React.Fragment>
