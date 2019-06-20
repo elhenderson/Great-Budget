@@ -6,8 +6,10 @@ import * as serviceWorker from './serviceWorker';
 import {Provider} from 'react-redux'
 import {createStore} from 'redux';
 import {BrowserRouter} from 'react-router-dom';
+import envelopeReducer from './store/reducers/envelope'
 
-const store = createStore(rootReducer)
+
+const store = createStore(envelopeReducer)
 
 ReactDOM.render(
   <Provider store={store} >
