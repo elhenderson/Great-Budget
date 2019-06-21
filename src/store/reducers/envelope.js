@@ -1,3 +1,5 @@
+import * as actionTypes from '../actions/actionTypes'
+
 const initialState = {
   income: 1000,
   envelopes: {
@@ -8,7 +10,18 @@ const initialState = {
 }
 
 const envelopeReducer = (state = initialState, action) => {
-  return state
+  switch(action.type) {
+    case actionTypes.SUBMIT_TRANSACTION:
+      return {
+        ...state,
+        envelopes: {
+          ...state.envelopes,
+          [action.envelopeName]: state.envelopes[action.envelopeName] - action.amount
+        }
+      }
+    default:
+      return state
+  }
 }
 
 export default envelopeReducer;

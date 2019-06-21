@@ -1,25 +1,52 @@
 import React, {Component} from 'react';
 import classes from './Modal.module.css';
 import Backdrop from '../Backdrop/Backdrop';
-import Dropdown from '../Dropdown/Dropdown';
+import Dropdown from 'react-dropdown';
+import 'react-dropdown/style.css';
+import {connect} from 'react-redux';
+import * as envelopeActions from '../../../store/actions/evelope' 
 
 class Modal extends Component {
+
   state = {
-    dropdownOpen: false
+    amount: 0,
+    envelopeName: ''
   }
 
   shouldComponentUpdate (nextProps, nextState) {
     return nextProps.show !== this.props.show || nextProps.children !== this.props.children;
   }
 
-  toggleDropdown = () => {
+  inputChangedHandler = (event, value) => {
     this.setState({
-      dropdownOpen: true
+      amount: event.target.value
+    })
+  }
+
+  dropdownChangedHandler = (envlpName) => {
+    this.setState({
+      envelopeName: this._onSelect
     })
   }
 
   render() {
 
+    const envelopesArray = Object.keys(this.props.envlps)
+    .map(envlpKey => (
+      {value: envlpKey, label: envlpKey.charAt(0).toUpperCase() + envlpKey.slice(1)}
+    ))
+
+    let form = (
+      <form>
+        <Dropdown 
+          options={envelopesArray}
+          placeholder="Select an envelope"
+          onChange={this._onSelect}
+          />
+        <input type="text" onChange={this.inputChangedHandler}/>
+        <button type="submit" onClick={(amount, envelopeName) => this.props.onTransaction()}>Submit</button>
+      </form>
+    );
   
     return (
       <React.Fragment>
@@ -33,14 +60,24 @@ class Modal extends Component {
             opacity: this.props.show ? '1' : '0'
           }}>
           {this.props.children}
-          <Dropdown isOpen={this.state.dropdownOpen} onClick={this.toggleDropdown}>
-            Click
-          </Dropdown>
+          {form}
         </div>
       </React.Fragment>
     )
   }
 }
 
+const mapStateToProps = state => {
+  return {
+    envlps: state.envelopes
+  }
+}
 
-export default Modal;
+const mapDispatchToProps = dispatch => {
+  return {
+    onTransaction: (envlpName, amount) => dispatch(envelopeActions.submitTransaction(envlpName, amount))
+  }
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(Modal);
