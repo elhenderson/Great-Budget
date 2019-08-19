@@ -1,25 +1,25 @@
 {
-  "name": "great_budget",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
-    "react-dropdown": "^1.6.4",
-    "react-redux": "^7.1.0",
-    "react-router-dom": "^5.0.1",
-    "react-scripts": "3.0.1",
-    "reactstrap": "^8.0.0",
-    "redux": "^4.0.1"
-  },
+  "name": "great-budget",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "eslintConfig": {
-    "extends": "react-app"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/elhenderson/Great-Budget.git"
   },
-  "browserslist": []
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/elhenderson/Great-Budget/issues"
+  },
+  "homepage": "https://github.com/elhenderson/Great-Budget#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "concurrently": "^4.1.2",
+    "express": "^4.17.1",
+    "mongoose": "^5.6.9"
+  }
 }
