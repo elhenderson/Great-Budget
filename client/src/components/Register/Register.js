@@ -1,8 +1,8 @@
 import React from 'react';
 import {Field, reduxForm} from 'redux-form';
 import {Form, FormGroup, Button} from 'reactstrap';
-import {required, email, password} from '../../utils/formValidators'
-import styles from './Login.module.css';
+import {required, email, password, confirmPassword} from '../../utils/formValidators'
+import styles from './Register.module.css';
 
 const renderField = ({
   input,
@@ -22,11 +22,13 @@ const renderField = ({
   </div>
 )
 
-const LoginForm = props => {
+const RegisterForm = props => {
   const { handleSubmit, pristine, reset, submitting } = props
   return (
     <div className={styles.form}>
-      <Form onSubmit={handleSubmit}>
+      <h2>Register</h2>
+      <hr />
+      <Form  onSubmit={handleSubmit}>
         <FormGroup >
           <Field
             name="email"
@@ -39,12 +41,23 @@ const LoginForm = props => {
         </FormGroup>
         <FormGroup>
           <Field 
+            
             name="password"
             type="password"
             component={renderField}
             validate={[required, password]}
             label="Password"
             placeholder="Enter your password"
+          />
+        </FormGroup>
+        <FormGroup>
+          <Field 
+            name="confirmPassword"
+            type="password"
+            component={renderField}
+            validate={[required, confirmPassword]}
+            label="Confirm Password"
+            placeholder="Enter your password again"
           />
         </FormGroup>
         <div>
@@ -56,12 +69,12 @@ const LoginForm = props => {
           </Button>
         </div>
       </Form>
-      <a href="/register">Don't have an account? Register now!</a>
+      <a href="/login" >Log in</a>
     </div>
+
   )
 }
 
 export default reduxForm({
-  form: 'loginForm' // a unique identifier for this form
-})(LoginForm)
-
+  form: 'registerForm' // a unique identifier for this form
+})(RegisterForm)

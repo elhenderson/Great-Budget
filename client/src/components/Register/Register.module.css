@@ -1,0 +1,16 @@
+.form {
+  text-align: center;
+  flex-direction: column;
+  display: flex;
+  justify-content: center;
+  border: 3px black solid;
+  margin: 100px 520px;
+  padding: 25px;
+
+}
+
+@media screen and (max-width: 1285px) {
+  .form {
+    margin: auto 10px;
+  }
+}

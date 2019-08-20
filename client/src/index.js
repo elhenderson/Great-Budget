@@ -9,6 +9,8 @@ import {BrowserRouter as Router, Route} from 'react-router-dom';
 import envelopeReducer from './store/reducers/envelope'
 import Landing from "./containers/Landing/Landing";
 import Envelopes from './containers/Envelopes';
+import Register from './components/Register/Register';
+import Login from './components/Login/Login';
 import {reducer as formReducer} from 'redux-form';
 // import Register from './components/Register/Register';
 
@@ -24,8 +26,9 @@ ReactDOM.render(
     <Router>
       <Route path="/" component={App} />
       <Route path="/landing" component={Landing}/>
-      {/* <Route path="/register" component={Register}/> */}
+      <Route path="/register" component={Register}/>
       <Route path='/envelopes' component={Envelopes}/>
+      <Route path="/login" component={Login} />
     </Router>
   </Provider>, 
   document.getElementById('root')
