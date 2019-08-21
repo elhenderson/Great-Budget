@@ -2,7 +2,8 @@ const express = require("express");
 const router = express();
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
-
+const jwt = require("jsonwebtoken");
+const keys = require("../keys")
 const User = require('../models/User');
 
 router.post('/user/register', async (req, res) => {
@@ -27,17 +28,11 @@ router.post('/user/register', async (req, res) => {
 
 router.post("/user/login", (req, res) => {
   User.findOne({email: req.body.email})
-  // .then(result => new Promise((resolve, reject) => {
-  //   bcrypt.compare(req.body.password, result.password).then(function(err, results) {
-  //     if (err) reject(err)
-  //     resolve((res.json({success: results})))
-  //   })
-  // })
-  // )
   .then((user) => {
+    const token = jwt.sign({id: user._id}, keys.keys.private)
     bcrypt.compare(req.body.password, user.password, function (err, result) {
       if (result == true) {
-        res.json({success: true})
+        res.json(token)
       } else {
         res.json({success: false})
       }
