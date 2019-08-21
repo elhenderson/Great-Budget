@@ -24,3 +24,5 @@ export const password = value =>
 export const confirmPassword = (value, allValues) => value && value !== allValues.password
   ? <p style={{color: 'red'}} ><FontAwesomeIcon key={uuidv4()} style={{color: 'red', marginRight: '5px'}} icon={faExclamationCircle} />Passwords must match</p>
   : undefined
+export const composeValidators = (...validators) => value =>
+validators.reduce((error, validator) => error || validator(value), undefined)

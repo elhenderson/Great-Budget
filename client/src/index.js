@@ -4,7 +4,7 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import {Provider} from 'react-redux'
-import {createStore, combineReducers} from 'redux';
+import {createStore, combineReducers, applyMiddleware} from 'redux';
 import {BrowserRouter as Router, Route} from 'react-router-dom';
 import envelopeReducer from './store/reducers/envelope'
 import Landing from "./containers/Landing/Landing";
@@ -12,6 +12,7 @@ import Envelopes from './containers/Envelopes';
 import Register from './components/Register/Register';
 import Login from './components/Login/Login';
 import {reducer as formReducer} from 'redux-form';
+import thunk from 'redux-thunk';
 // import Register from './components/Register/Register';
 
 const rootReducer = combineReducers({
@@ -19,7 +20,7 @@ const rootReducer = combineReducers({
   form: formReducer
 })
 
-const store = createStore(rootReducer)
+const store = createStore(rootReducer, applyMiddleware(thunk))
 
 ReactDOM.render(
   <Provider store={store} >
