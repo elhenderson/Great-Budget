@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Form, Field} from 'react-final-form';
 // import {Form, FormGroup, Button} from 'reactstrap';
 import {required, email as emailValidator, password as passwordValidator, composeValidators} from '../../utils/formValidators'
@@ -23,25 +23,38 @@ const renderField = ({
   </div>
 )
 
-const onSubmit = values => {
-  userActions.getUser(values);
-}
-
 const LoginForm = props => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [userData, setUserData] = useState(props.user)
 
+  const {cookies} = props;
+
+  const authHandler = async (values) => {
+    try {
+      await props.getUser(values)
+      await console.log(props.user);
+      await cookies.set('token', props.user.user.token, {path: '/'});
+    } catch(err) {
+      console.log(err);
+    }
+  }
+
+  useEffect(() => {
+    console.log(props.cookies);
+  }, [console.log(props.user.user)])
 
   return (
     <div className={styles.form}>
       <Form onSubmit={values => {
-        console.log(values)
-        props.getUser(values);
+        authHandler(values);
+        
       }}>
         {({handleSubmit, pristine, form, submitting}) => (
           <form onSubmit={handleSubmit}>
             <div >
             <Field
+            validate={composeValidators(required, emailValidator)}
               onChange={e => setEmail(e.target.value)}
               value={email}
               name="email"
@@ -81,8 +94,9 @@ const LoginForm = props => {
   )
 }
 
-const mapStateToProps = state => ({
-  user: state.user
+const mapStateToProps = (state, ownProps) => ({
+  user: state.user,
+  cookies: ownProps.cookies
 })
 
 const mapDispatchToProps = dispatch => ({

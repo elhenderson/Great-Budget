@@ -5,33 +5,27 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import {Provider} from 'react-redux'
 import {createStore, combineReducers, applyMiddleware} from 'redux';
-import {BrowserRouter as Router, Route} from 'react-router-dom';
+import {BrowserRouter} from 'react-router-dom';
 import envelopeReducer from './store/reducers/envelope'
-import Landing from "./containers/Landing/Landing";
-import Envelopes from './containers/Envelopes';
-import Register from './components/Register/Register';
-import Login from './components/Login/Login';
+
 import {reducer as formReducer} from 'redux-form';
 import thunk from 'redux-thunk';
+import rootReducer from "./store/reducers/index"
+import {CookiesProvider, withCookies} from 'react-cookie';
+
 // import Register from './components/Register/Register';
 
-const rootReducer = combineReducers({
-  envelope: envelopeReducer,
-  form: formReducer
-})
 
 const store = createStore(rootReducer, applyMiddleware(thunk))
 
 ReactDOM.render(
-  <Provider store={store} >
-    <Router>
-      <Route path="/" component={App} />
-      <Route path="/landing" component={Landing}/>
-      <Route path="/register" component={Register}/>
-      <Route path='/envelopes' component={Envelopes}/>
-      <Route path="/login" component={Login} />
-    </Router>
-  </Provider>, 
+  <CookiesProvider>
+    <BrowserRouter>
+      <Provider store={store} >
+        <App />
+      </Provider>
+    </BrowserRouter>
+  </CookiesProvider>, 
   document.getElementById('root')
 );
 

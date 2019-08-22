@@ -32,7 +32,11 @@ router.post("/user/login", (req, res) => {
     const token = jwt.sign({id: user._id}, keys.keys.private)
     bcrypt.compare(req.body.password, user.password, function (err, result) {
       if (result == true) {
-        res.json(token)
+        res.json({
+          success: true,
+          message: 'Authentication successful',
+          token: token
+        })
       } else {
         res.json({success: false})
       }

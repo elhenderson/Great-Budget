@@ -5,6 +5,7 @@ export const getUser = (user) => dispatch => {
   axios
   .post('/api/user/login', user)
   .then(res => 
+    // console.log(res.data),
     dispatch({
       type: GET_USER,
       payload: res.data

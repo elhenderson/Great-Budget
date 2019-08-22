@@ -2,7 +2,7 @@ import {GET_USER, ADD_USER} from '../actions/actionTypes';
 
 const initialState = {}
 
-export default function(state=initialState, action) {
+const userReducer = function(state=initialState, action) {
   switch (action.type) {
     case GET_USER:
       return {
@@ -14,5 +14,9 @@ export default function(state=initialState, action) {
         ...state,
         user: action.payload
       };
+    default:
+      return state
   };
 };
+
+export default userReducer;
