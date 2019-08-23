@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken");
 const keys = require("../keys")
 const User = require('../models/User');
 
-router.post('/user/register', async (req, res) => {
+router.post('/register', async (req, res) => {
   const passwordToStore = await new Promise((resolve, reject) => {
     bcrypt.hash(req.body.password, saltRounds, function (err, hash) {
       if (err) reject(err)
@@ -14,19 +14,17 @@ router.post('/user/register', async (req, res) => {
     });
 
   })
-  
-
-  await console.log(passwordToStore)
-  const newUser = await new User({
+    const newUser = await new User({
     email: req.body.email,
-    password: passwordToStore
+    password: passwordToStore,
+    envelopes: {"test": "test"}
   });
   await newUser.save()
   .then((result) => res.json(result));
 });
 
 
-router.post("/user/login", (req, res) => {
+router.post("/login", (req, res) => {
   User.findOne({email: req.body.email})
   .then((user) => {
     const token = jwt.sign({id: user._id}, keys.keys.private)

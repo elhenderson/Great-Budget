@@ -33,7 +33,6 @@ const LoginForm = props => {
   const authHandler = async (values) => {
     try {
       await props.getUser(values)
-      await console.log(props.user);
       await cookies.set('token', props.user.user.token, {path: '/'});
     } catch(err) {
       console.log(err);

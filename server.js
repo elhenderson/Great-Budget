@@ -2,16 +2,20 @@ const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const path = require("path");
+const cookieParser = require("cookie-parser");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
+app.use(cookieParser());
 
-const routes = require("./routes/user");
+const userRoutes = require("./routes/user");
+const envelopeRoutes = require('./routes/envelope');
 
-app.use("/api", routes);
+app.use("/api/user", userRoutes);
+app.use("/api/envelopes", envelopeRoutes);
 
 
 

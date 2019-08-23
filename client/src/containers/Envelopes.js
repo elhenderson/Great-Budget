@@ -1,52 +1,40 @@
-import React, {Component} from 'react';
+import React, {Component, useEffect, useState} from 'react';
 import {connect} from 'react-redux';
-import Envelope from '../components/Envelope';
 import Modal from '../components/UI/Modal/Modal';
 import Toolbar from '../components/Navigation/Toolbar/Toolbar';
+import * as envelopeActions from '../store/actions/evelope';
 
-class Envelopes extends Component {
-  state = {
-    transacting: false
-  }
 
-  transactionHandler = () => {
-    this.setState({transacting: true})
-  }
+const Envelopes = props => {
 
-  transactionCancelledHandler = () => {
-    this.setState({transacting: false})
-  }
 
-  loadEnvelopes (envelopes) {
-    const envelopesArray = Object.keys(envelopes)
-      .map(envlpKey => (
-        `${envlpKey}: ${envelopes[envlpKey]}`
-      ))
-    return envelopesArray
-  }
+  useEffect(() => {
+    props.getEnvelopes()
+  }, [])
 
-  render() {
+  const envelopes = for (let envelope in props.envelope) {
     return (
-      <div>
-        {/* <Toolbar clicked={this.transactionHandler}/> */}
-        <Envelope 
-          cashFlow={this.props.cashFlow}
-          envelopes={this.loadEnvelopes(this.props.envlps)} />
-        <Modal 
-          show={this.state.transacting}
-          modalClosed={this.transactionCancelledHandler}>
-        </Modal>
-      </div>
+      <p>{props.envelope[envelope]}</p>
     )
   }
+
+  return (
+    <div>
+      {console.log(props.envelopes)}
+    </div>
+  )
 }
 
-const mapStateToProps = state => {
-  return {
-    cashFlow: state.income,
-    envlps: state.envelopes
-  }
-}
+const mapStateToProps = state => ({
+  envelopes: state.envelope.envelopes
+})
 
-export default connect(mapStateToProps)(Envelopes);
+ 
+
+
+const mapDispatchToProps = dispatch => ({
+  getEnvelopes:() => dispatch(envelopeActions.getEnvelopes())
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Envelopes);
 

@@ -75,7 +75,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onTransaction: (envlpName, amount) => dispatch(envelopeActions.submitTransaction(envlpName, amount))
+    onTransaction: (envlpName, amount) => dispatch(envelopeActions.getEnvelopes(envlpName, amount))
   }
 }
 
