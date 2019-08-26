@@ -20,6 +20,7 @@ class App extends Component {
             <Route path="/login" render={() => <Login cookies={this.props.cookies} />} />
           </Switch>
         </Layout>
+      <div id="modal-root" ></div>
       </div>
     );
   }
