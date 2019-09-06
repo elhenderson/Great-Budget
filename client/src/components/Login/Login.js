@@ -25,16 +25,16 @@ let LoginForm = props => {
     </div>
   )
 
-  return (
+  const loginForm = (
     <Form onSubmit={handleSubmit}>
-      <Field
+      {/* <Field
         name="email"
         type="email"
         component={renderField}
         label="Email"
         validate={[email, required]}
         warn={[email, required]}
-      />
+      /> */}
       <FormGroup>
         <Label htmlFor="email">Email</Label>
         <Field 
@@ -52,10 +52,13 @@ let LoginForm = props => {
       <Button >Log in</Button>
     </Form>
   )
+
+  return (
+
+  )
 }
   
-LoginForm = reduxForm({
-  form: 'login'
-})(LoginForm)
 
-export default LoginForm;
+export default reduxForm({
+  form: 'login'
+})(LoginForm);
