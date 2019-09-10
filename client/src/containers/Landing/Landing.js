@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import LoginForm from "../../components/Login/Login";
-
+import RegisterForm from "../../components/Register/Register";
 
 
 class Landing extends Component {
@@ -58,6 +58,7 @@ class Landing extends Component {
       <div className="container">
         {/* {determineForm} */}
         <LoginForm onSubmit={this.submit} />
+        {/* <RegisterForm onSubmit={this.submit} /> */}
       </div>
     )
   }

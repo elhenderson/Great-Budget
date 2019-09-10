@@ -1,52 +1,137 @@
-import React, {Component} from 'react';
+import React, {Component, useEffect, useState} from 'react';
+import ReactDOM from 'react-dom';
+import Modal from 'react-modal'
 import {connect} from 'react-redux';
-import Envelope from '../components/Envelope';
-import Modal from '../components/UI/Modal/Modal';
-import Toolbar from '../components/Navigation/Toolbar/Toolbar';
+// import Modal from '../components/UI/Modal/Modal';
+import * as envelopeActions from '../store/actions/evelope';
+import uuidv4 from 'uuid';
+import {Form, Field} from 'react-final-form';
 
-class Envelopes extends Component {
-  state = {
-    transacting: false
+
+const modalStyles = {
+  content : {
+    transition: 'bottom 1s ease-out',
+    transform: 'translate(-50%, -50%)',
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto'
+  }
+};
+
+const renderField = ({
+  input,
+  label,
+  type,
+  placeholder,
+  meta: { touched, error, warning }
+}) => (
+  <div>
+    <label>{label}</label>
+    <div>
+      <input {...input} placeholder={placeholder}  />
+      {touched &&
+        ((error && <span >{error}</span>) ||
+          (warning && <span>{warning}</span>))}
+    </div>
+  </div>
+)
+
+const Envelopes = props => {
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [envelopeValue, setEnvelopeValue] = useState();
+  const [envelopeArray, setEnvelopeArray] = useState([])
+
+  useEffect(() => {
+    initialEnvelopes()
+  }, [])
+
+  const openModal = () => {
+
+    setModalIsOpen(true);
   }
 
-  transactionHandler = () => {
-    this.setState({transacting: true})
+  const closeModal = () => {
+    setModalIsOpen(false);
   }
 
-  transactionCancelledHandler = () => {
-    this.setState({transacting: false})
+  function initialEnvelopes() {
+    props.getEnvelopes();
   }
 
-  loadEnvelopes (envelopes) {
-    const envelopesArray = Object.keys(envelopes)
-      .map(envlpKey => (
-        `${envlpKey}: ${envelopes[envlpKey]}`
+  const mergeEnvelopeChanges = (envelopeToChange, value) => {
+    const updatedEnvelopesObj = {
+      ...props.envelopes, 
+      [envelopeToChange]: value.envelopeValue
+    }
+
+    props.editEnvelopes(updatedEnvelopesObj);
+    window.location.reload();
+  }
+
+  const renderEnvelopes = () => {
+      let envelopesArray = Object.entries(props.envelopes);
+      const renderedEnvelopes = envelopesArray.map((envelopeInfo, index) => (
+          <p key={uuidv4()}>{envelopeInfo[0]} : {envelopeInfo[1]}
+          <button onClick={openModal}>Edit</button>
+          <Modal
+            ariaHideApp={false}
+            isOpen={modalIsOpen}
+            onRequestClose={closeModal}
+            style={modalStyles}
+            contentLabel="Edit Envelope"
+          >
+            <h2>{envelopeInfo[0]}</h2>
+            <Form onSubmit={value => {
+              mergeEnvelopeChanges(envelopeInfo[0], value)
+            }} >
+              {({handleSubmit, pristine, form, submitting}) => (
+                <form onSubmit={handleSubmit}>
+                  <div>
+                    <Field 
+                      component={renderField}
+                      name="envelopeValue"
+                      value={envelopeValue}
+                      onChange={e => setEnvelopeValue(e.target.value)}
+                      placeholder={envelopeInfo[1]}
+                    />
+                    <button type="submit" disabled={submitting, pristine}>
+                      Submit
+                    </button>
+                    <button type="button" onClick={closeModal}>
+                      Cancel
+                    </button>
+                  </div>
+                </form>
+              )}
+            </Form>
+          </Modal>
+        </p>
       ))
-    return envelopesArray
-  }
 
-  render() {
-    return (
-      <div>
-        {/* <Toolbar clicked={this.transactionHandler}/> */}
-        <Envelope 
-          cashFlow={this.props.cashFlow}
-          envelopes={this.loadEnvelopes(this.props.envlps)} />
-        <Modal 
-          show={this.state.transacting}
-          modalClosed={this.transactionCancelledHandler}>
-        </Modal>
-      </div>
-    )
+    return renderedEnvelopes;
   }
+ 
+  return (
+
+    <div>
+      {renderEnvelopes()}
+      {/* {renderEnvelopes()} */}
+    </div>
+  )
 }
 
-const mapStateToProps = state => {
-  return {
-    cashFlow: state.income,
-    envlps: state.envelopes
-  }
-}
+const mapStateToProps = state => ({
+  envelopes: state.envelope.envelopes
+})
 
-export default connect(mapStateToProps)(Envelopes);
+ 
+
+
+const mapDispatchToProps = dispatch => ({
+  getEnvelopes:() => dispatch(envelopeActions.getEnvelopes()),
+  editEnvelopes:(envelopes) => dispatch(envelopeActions.editEnvelopes(envelopes))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Envelopes);
 
