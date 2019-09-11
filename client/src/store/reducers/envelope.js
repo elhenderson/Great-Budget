@@ -8,12 +8,16 @@ const envelopeReducer = (state = initialState, action) => {
       return {
         ...state,
         envelopes: action.payload
-        // envelopes: {
-        //   ...state.envelopes,
-        //   [action.envelopeName]: state.envelopes[action.envelopeName] - action.amount
-        // }
       }
     case actionTypes.EDIT_ENVELOPES:
+      return {
+        ...state
+      }
+    case actionTypes.ADD_ENVELOPE:
+      return {
+        ...state
+      }
+    case actionTypes.DELETE_ENVELOPE:
       return {
         ...state
       }

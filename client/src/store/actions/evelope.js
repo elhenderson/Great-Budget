@@ -19,3 +19,18 @@ export const editEnvelopes = (envelopes) => dispatch => {
   axios
   .put('/api/envelopes', {envelopes})
 }
+
+export const addEnvelope = (envelope) => {
+  axios.put('/api/envelopes', envelope)
+}
+
+export const deleteEnvelope = (envelopes, envelopeToDelete) => dispatch => {
+  axios.put('/api/envelopes/delete', {envelopes, envelopeToDelete})
+  .then(res => {
+    window.location.reload()
+    dispatch({
+      type: actionTypes.DELETE_ENVELOPE,
+      payload: res.data[0]
+    })
+  })
+}

@@ -24,6 +24,18 @@ router.put("/", (req, res) => {
   .catch(err => console.log(err))
 })
 
+router.put("/delete", (req, res) => {
+  const userId = jwt.decode(req.cookies.token).id;
+  // console.log(req.body)
+  const envelopes = req.body.envelopes
+  const envelopeToDelete = req.body.envelopeToDelete
+  delete envelopes[envelopeToDelete]
+  console.log(envelopes)
+  User.findOneAndUpdate({_id: userId}, {$set: {envelopes: envelopes}})
+  .then(result => res.json(result))
+  .catch(err => console.log(err));
+})
+
 router.post("/", (req, res) => {
   const newEnvelope = new Envelope({
     name: req.body.name,
