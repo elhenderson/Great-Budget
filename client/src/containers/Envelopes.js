@@ -40,14 +40,18 @@ const renderField = ({
 const Envelopes = props => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [envelopeValue, setEnvelopeValue] = useState();
-  const [envelopeArray, setEnvelopeArray] = useState([])
+  const [envelopeName, setEnvelopeName] = useState();
+  const [initialEnvelopeValue, setInitialEnvelopeValue] = useState();
+  const [test, setTest] = useState(props.envelopes)
 
   useEffect(() => {
-    initialEnvelopes()
+    initialEnvelopes();
+    
   }, [])
 
-  const openModal = () => {
-
+  const openModal = (envelopeNameToSet, initalEnvelopeValueToSet) => {
+    setEnvelopeName(envelopeNameToSet);
+    setInitialEnvelopeValue(initalEnvelopeValueToSet);
     setModalIsOpen(true);
   }
 
@@ -69,43 +73,47 @@ const Envelopes = props => {
     window.location.reload();
   }
 
+  const renderModal = () => (
+    <Modal
+      ariaHideApp={false}
+      isOpen={modalIsOpen}
+      onRequestClose={closeModal}
+      style={modalStyles}
+      contentLabel="Edit Envelope"
+    >
+      <h2>{envelopeName}</h2>
+      <Form onSubmit={value => {
+        mergeEnvelopeChanges(envelopeName, value)
+      }} >
+        {({handleSubmit, pristine, form, submitting}) => (
+          <form onSubmit={handleSubmit}>
+            <div>
+              <Field 
+                component={renderField}
+                name="envelopeValue"
+                value={envelopeValue}
+                onChange={e => setEnvelopeValue(e.target.value)}
+                placeholder={initialEnvelopeValue}
+              />
+              <button type="submit" disabled={submitting, pristine}>
+                Submit
+              </button>
+              <button type="button" onClick={closeModal}>
+                Cancel
+              </button>
+            </div>
+          </form>
+        )}
+      </Form>
+    </Modal>
+  )
+
   const renderEnvelopes = () => {
       let envelopesArray = Object.entries(props.envelopes);
       const renderedEnvelopes = envelopesArray.map((envelopeInfo, index) => (
           <p key={uuidv4()}>{envelopeInfo[0]} : {envelopeInfo[1]}
-          <button onClick={openModal}>Edit</button>
-          <Modal
-            ariaHideApp={false}
-            isOpen={modalIsOpen}
-            onRequestClose={closeModal}
-            style={modalStyles}
-            contentLabel="Edit Envelope"
-          >
-            <h2>{envelopeInfo[0]}</h2>
-            <Form onSubmit={value => {
-              mergeEnvelopeChanges(envelopeInfo[0], value)
-            }} >
-              {({handleSubmit, pristine, form, submitting}) => (
-                <form onSubmit={handleSubmit}>
-                  <div>
-                    <Field 
-                      component={renderField}
-                      name="envelopeValue"
-                      value={envelopeValue}
-                      onChange={e => setEnvelopeValue(e.target.value)}
-                      placeholder={envelopeInfo[1]}
-                    />
-                    <button type="submit" disabled={submitting, pristine}>
-                      Submit
-                    </button>
-                    <button type="button" onClick={closeModal}>
-                      Cancel
-                    </button>
-                  </div>
-                </form>
-              )}
-            </Form>
-          </Modal>
+          <button onClick={() => openModal(envelopeInfo[0], envelopeInfo[1])}>Edit</button>
+          {renderModal()}
         </p>
       ))
 
@@ -116,7 +124,7 @@ const Envelopes = props => {
 
     <div>
       {renderEnvelopes()}
-      {/* {renderEnvelopes()} */}
+      <button onClick={openModal}>Add Envelope</button>
     </div>
   )
 }
