@@ -7,6 +7,8 @@ import Landing from "./containers/Landing/Landing";
 import Envelopes from './containers/Envelopes';
 import Register from './components/Register/Register';
 import Login from './components/Login/Login';
+import Transactions from './containers/Transactions';
+import Income from './containers/Income';
 
 class App extends Component {
   render() {
@@ -18,6 +20,8 @@ class App extends Component {
             <Route path="/register" render={() => <Register cookies={this.props.cookies} />}/>
             <Route path='/envelopes' render={() => <Envelopes cookies={this.props.cookies} />}/>
             <Route path="/login" render={() => <Login cookies={this.props.cookies} />} />
+            <Route path="/transactions" render={() => <Transactions cookies={this.props.cookies} />} />
+            <Route path="/income" render={() => <Income cookies={this.props.cookies} />} />
           </Switch>
         </Layout>
       <div id="modal-root" ></div>
