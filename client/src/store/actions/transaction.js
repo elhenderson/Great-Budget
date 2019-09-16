@@ -6,3 +6,10 @@ export const isTransacting = (isTransacting) => dispatch => {
     payload: isTransacting
   })
 };
+
+export const transferFunds = (isTransfering) => dispatch => {
+  dispatch({
+    type: actionTypes.TRANSFER_FUNDS,
+    payload: isTransfering
+  })
+}

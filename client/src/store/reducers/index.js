@@ -10,5 +10,5 @@ export default combineReducers({
   envelope: envelopeReducer,
   user: userReducer,
   form: formReducer,
-  transacting: transactionReducer
+  transactions: transactionReducer
 })
