@@ -9,6 +9,9 @@ import Register from './components/Register/Register';
 import Login from './components/Login/Login';
 import Transactions from './containers/Transactions';
 import Income from './containers/Income';
+import {ToastContainer} from 'react-toastify'
+import '../node_modules/react-toastify/dist/ReactToastify.min.css'
+
 
 class App extends Component {
   render() {
@@ -23,6 +26,7 @@ class App extends Component {
             <Route path="/transactions" render={() => <Transactions cookies={this.props.cookies} />} />
             <Route path="/income" render={() => <Income cookies={this.props.cookies} />} />
           </Switch>
+          <ToastContainer />
         </Layout>
       <div id="modal-root" ></div>
       </div>

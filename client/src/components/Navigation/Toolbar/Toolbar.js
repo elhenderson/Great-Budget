@@ -1,12 +1,26 @@
-import React from 'react';
+import React, {useState} from 'react';
 import classes from './Toolbar.module.css';
+import AddTransaction from '../../../containers/AddTransaction';
+import { connect } from 'react-redux';
+import * as transactionActions from '../../../store/actions/transaction';
 
-const toolbar = (props) => (
-  <header className={classes.Toolbar}>
-    <p onClick={props.clicked}>Add Transaction</p>
-    <p>Transfer</p>
-    <p>Fill Envelope</p>
-  </header>
-)
+const Toolbar = (props) => {
 
-export default toolbar;
+  return (
+    <div>
+      <header className={classes.Toolbar}>
+        <p onClick={() => props.isTransacting(true)}>Add Transaction</p>
+        <p>Transfer</p>
+        <p>Fill Envelope</p>
+      </header>
+        <AddTransaction />
+    </div>
+
+  )
+}
+
+const mapDispatchToProps = dispatch => ({
+  isTransacting: (isTransacting) => dispatch(transactionActions.isTransacting(isTransacting))
+})
+
+export default connect(null, mapDispatchToProps)(Toolbar);

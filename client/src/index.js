@@ -7,7 +7,6 @@ import {Provider} from 'react-redux'
 import {createStore, combineReducers, applyMiddleware} from 'redux';
 import {BrowserRouter} from 'react-router-dom';
 import envelopeReducer from './store/reducers/envelope'
-
 import {reducer as formReducer} from 'redux-form';
 import thunk from 'redux-thunk';
 import rootReducer from "./store/reducers/index"

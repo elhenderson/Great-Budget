@@ -7,6 +7,8 @@ import FormStateToRedux from '../utils/formStateToRedux';
 import FormStateFromRedux from '../utils/formStateFromRedux';
 import uuidv4 from 'uuid';
 import Modal from 'react-modal'
+import alertify from 'alertifyjs';
+import {toast} from 'react-toastify';
 
 
 const renderField = ({
@@ -38,15 +40,18 @@ const modalStyles = {
   }
 };
 
+let incomeOverageMessage = ""
+
 
 const Income = props => {
   // const [incomeSource, setIncomeSource] = useState();
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [incomeAmount, setIncomeAmount] = useState("0.00");
+  const [envelopesObj, setEnvelopesObj] = useState({})
 
   useEffect(() => {
     initialEnvelopes();
-    
+    setEnvelopesObj(props.envelopes)
   }, [])
   function initialEnvelopes() {
     props.getEnvelopes();
@@ -65,25 +70,62 @@ const Income = props => {
     setModalIsOpen(false);
   }
 
+  const incomeOverageValidator = (values) => {
+    let currentEnvelopesArray = Object.entries(props.envelopes);
+    const currentEnvelopes = currentEnvelopesArray.map(envelopeInfo => {
+      return envelopeInfo[1]
+    })
+    
+    let toAddEnvelopesArray = Object.entries(values)
+    const toAddEnvelopes = toAddEnvelopesArray.map((envelopeInfo, index) => {
+      const newEnvelopeAmount = (+envelopeInfo[1] + +currentEnvelopes[index]).toFixed(2)
+      return newEnvelopeAmount
+    })
+
+    let envelopesTotal = 0;
+    for (let envelopeValue in values) {
+      envelopesTotal += +values[envelopeValue]
+    }
+    if (envelopesTotal <= incomeAmount) {
+      let envelopeObj = values
+      for (let i = 0; i < toAddEnvelopes.length; i++) {
+        envelopeObj[currentEnvelopesArray[i][0]] = toAddEnvelopes[i]
+      }
+      props.editEnvelopes(envelopeObj);
+      window.location.reload();
+    } else {
+      toast.error('Error: Envelope total exceeds income amount!', {
+        position: "top-right",
+        'autoClose': 5000,
+        'hideProgressBar': false,
+        'closeOnClick': true,
+        'pauseOnHover': true,
+        'draggable': true
+        });
+    }
+  }
+  
 
   const envelopes = () => {
+    
     let envelopesArray = Object.entries(props.envelopes);
     const envelopes = envelopesArray.map((envelopeInfo, index) => (
-        <Field 
-          key={envelopeInfo[0]}
-          name={envelopeInfo[0]}
-          type="text"
-          component={renderField}
-          label={envelopeInfo[0]}
-        />
+        <div key={envelopeInfo[0]}>
+          <Field 
+            name={envelopeInfo[0]}
+            type="text"
+            component={renderField}
+            label={envelopeInfo[0]}
+          />
+        </div>
     ))
 
     return envelopes;
   }
 
-  const displayIncomeAmount = (amount) => {
-    setIncomeAmount(amount);
-  }
+  // const displayIncomeAmount = (amount) => {
+  //   setIncomeAmount(amount);
+  // }
 
   return (
     <div>
@@ -130,6 +172,22 @@ const Income = props => {
       contentLabel="Edit Envelope"
       >
         {incomeAmount}
+        <p>
+          {incomeOverageMessage}
+        </p>
+        <Form 
+        onSubmit={(values) => {
+          incomeOverageValidator(values) 
+        }}>
+          {({handleSubmit, pristine, form, submitting}) => (
+            <form onSubmit={handleSubmit}>
+              <div>
+                {envelopes()}
+                <button type="submit" disabled={submitting, pristine} >Submit</button>
+              </div>
+            </form>
+          )}
+        </Form>
       </Modal>
     </div>
   )
@@ -143,7 +201,8 @@ const mapStateToProps = state => ({
 
 
 const mapDispatchToProps = dispatch => ({
-  getEnvelopes:() => dispatch(envelopeActions.getEnvelopes())
+  getEnvelopes:() => dispatch(envelopeActions.getEnvelopes()),
+  editEnvelopes:(envelopes) => dispatch(envelopeActions.editEnvelopes(envelopes))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Income);

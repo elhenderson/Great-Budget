@@ -5,3 +5,4 @@ export const DELETE_ENVELOPE = "DELETE_ENVELOPE";
 export const ADD_USER = "ADD_USER";
 export const GET_USER = "GET_USER";
 export const UPDATE_FORM_STATE = "UPDATE_FORM_STATE";
+export const IS_TRANSACTING = "IS_TRANSACTING";
