@@ -70,7 +70,7 @@ const Envelopes = props => {
   const mergeEnvelopeChanges = (envelopeToChange, value) => {
     const updatedEnvelopesObj = {
       ...props.envelopes, 
-      [envelopeToChange]: value
+      [envelopeToChange]: "0.00"
     }
 
     props.editEnvelopes(updatedEnvelopesObj);
@@ -139,7 +139,7 @@ const Envelopes = props => {
     >
       <h2>Add Envelope</h2>
       <Form onSubmit={values => {
-        mergeEnvelopeChanges(values.envelopeName, values.envelopeValue)
+        mergeEnvelopeChanges(values.envelopeName)
       }} >
         {({handleSubmit, pristine, form, submitting}) => (
           <form onSubmit={handleSubmit}>
@@ -150,13 +150,13 @@ const Envelopes = props => {
                 value={envelopeName}
                 onChange = {e => setEnvelopeName(e.target.value)}
               />
-              <Field 
+              {/* <Field 
                 component={renderField}
                 name="envelopeValue"
                 value={envelopeValue}
                 onChange={e => setEnvelopeValue(e.target.value)}
                 placeholder={initialEnvelopeValue}
-              />
+              /> */}
               <button type="submit" disabled={submitting, pristine}>
                 Submit
               </button>
@@ -174,7 +174,7 @@ const Envelopes = props => {
       let envelopesArray = Object.entries(props.envelopes);
       const renderedEnvelopes = envelopesArray.map((envelopeInfo, index) => (
           <p key={uuidv4()}>{envelopeInfo[0]} : {envelopeInfo[1]}
-          <button onClick={() => openModal(envelopeInfo[0], envelopeInfo[1])}>Edit</button>
+          {/* <button onClick={() => openModal(envelopeInfo[0], envelopeInfo[1])}>Edit</button> */}
           <button onClick={() => onDeleteEnvelope(envelopeInfo[0])} >Delete</button>
         </p>
       ))
