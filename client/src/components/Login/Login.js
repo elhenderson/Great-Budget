@@ -28,20 +28,16 @@ const LoginForm = props => {
   const [password, setPassword] = useState("");
   const [userData, setUserData] = useState(props.user)
 
-  const {cookies} = props;
+
 
   const authHandler = async (values) => {
     try {
       await props.getUser(values)
-      await cookies.set('token', props.user.user.token, {path: '/'});
     } catch(err) {
       console.log(err);
     }
   }
 
-  useEffect(() => {
-    console.log(props.cookies);
-  }, [console.log(props.user.user)])
 
   return (
     <div className={styles.form}>
@@ -94,8 +90,7 @@ const LoginForm = props => {
 }
 
 const mapStateToProps = (state, ownProps) => ({
-  user: state.user,
-  cookies: ownProps.cookies
+  user: state.user
 })
 
 const mapDispatchToProps = dispatch => ({

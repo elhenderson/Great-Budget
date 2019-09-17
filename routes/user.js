@@ -17,7 +17,8 @@ router.post('/register', async (req, res) => {
     const newUser = await new User({
     email: req.body.email,
     password: passwordToStore,
-    envelopes: {"test": "test"}
+    envelopes: {},
+    unallocated: "0.00"
   });
   await newUser.save()
   .then((result) => res.json(result));

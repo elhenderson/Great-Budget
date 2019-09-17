@@ -20,6 +20,8 @@ const modalStyles = {
   }
 };
 
+Modal.defaultStyles.overlay.color = 'gray';
+Modal.defaultStyles.overlay.background = 'gray';
 
 const renderField = ({
   input,

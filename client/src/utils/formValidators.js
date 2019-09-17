@@ -6,10 +6,12 @@ import {faExclamationCircle} from '@fortawesome/free-solid-svg-icons';
 
 
 export const required = value => (value || typeof value === 'number' ? undefined : <p  style={{color: 'red'}} ><FontAwesomeIcon key={uuidv4()} style={{color: 'red', marginRight: '5px'}} icon={faExclamationCircle} />This field is required</p>)
+
 export const email = value => 
   value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)
     ? <p style={{color: 'red'}} ><FontAwesomeIcon key={uuidv4()} style={{color: 'red', marginRight: '5px'}} icon={faExclamationCircle} />Invalid email</p>
     : undefined
+
 export const password = value => 
   value && !/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/i.test(value)
     ?  
@@ -21,8 +23,10 @@ export const password = value =>
         <p style={{color: 'red'}} ><FontAwesomeIcon key={uuidv4()} style={{color: 'red', marginRight: '5px'}} icon={faExclamationCircle} />Must be eight characters or longer</p>
     </React.Fragment>
     : undefined
+
 export const confirmPassword = (value, allValues) => value && value !== allValues.password
   ? <p style={{color: 'red'}} ><FontAwesomeIcon key={uuidv4()} style={{color: 'red', marginRight: '5px'}} icon={faExclamationCircle} />Passwords must match</p>
   : undefined
+
 export const composeValidators = (...validators) => value =>
 validators.reduce((error, validator) => error || validator(value), undefined)

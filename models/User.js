@@ -12,6 +12,9 @@ const UserSchema = new Schema({
   },
   envelopes: {
     type: Array
+  },
+  unallocated: {
+    type: String
   }
 });
 

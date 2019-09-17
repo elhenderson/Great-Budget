@@ -3,13 +3,13 @@ import {connect} from 'react-redux';
 import {Form, Field} from 'react-final-form';
 import {required, composeValidators } from '../utils/formValidators';
 import * as envelopeActions from '../store/actions/evelope';
-import FormStateToRedux from '../utils/formStateToRedux';
-import FormStateFromRedux from '../utils/formStateFromRedux';
 import uuidv4 from 'uuid';
 import Modal from 'react-modal'
 import alertify from 'alertifyjs';
 import {toast} from 'react-toastify';
 
+Modal.defaultStyles.overlay.color = 'gray';
+Modal.defaultStyles.overlay.background = 'gray';
 
 const renderField = ({
   input,
@@ -165,13 +165,17 @@ const Income = props => {
         )}
       </Form>
       <Modal
+      style={{background: "gray"}}
       ariaHideApp={false}
       isOpen={modalIsOpen}
       onRequestClose={closeModal}
       style={modalStyles}
       contentLabel="Edit Envelope"
       >
-        {incomeAmount}
+        <h3>Plan your finances</h3>
+        <hr/>
+        <h4>Decide where you'll spend your money</h4>
+        Current income: {incomeAmount}
         <p>
           {incomeOverageMessage}
         </p>

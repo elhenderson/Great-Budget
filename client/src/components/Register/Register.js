@@ -4,6 +4,7 @@ import {required, email as emailValidator, password as passwordValidator, confir
 import styles from './Register.module.css';
 import {connect} from 'react-redux';
 import * as userActions from '../../store/actions/user';
+import {toast} from 'react-toastify';
 
 const renderField = ({
   input,
@@ -30,9 +31,9 @@ const RegisterForm = props => {
 
   const registerUser = (values) => {
     try {
-      props.addUser(values)
+      props.addUser(values);
     } catch(err) {
-      console.log(err);
+      toast.error(err)
     }
   }
 
@@ -99,7 +100,8 @@ const RegisterForm = props => {
 }
 
 const mapDispatchToProps = dispatch => ({
-  addUser: (user) => dispatch(userActions.addUser(user))
+  addUser: (user) => dispatch(userActions.addUser(user)),
+  getUser: (user) => dispatch(userActions.getUser(user))
 })
 
 export default connect(null, mapDispatchToProps)(RegisterForm)

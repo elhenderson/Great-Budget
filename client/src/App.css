@@ -31,3 +31,8 @@
     transform: rotate(360deg);
   }
 }
+
+.ReactModal_Content .ReactModal_Overlay--after-open {
+  background: gray;
+}
+
