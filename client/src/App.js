@@ -22,7 +22,7 @@ class App extends Component {
             <Route path="/landing" render={() => <Landing cookies={this.props.cookies} />}/>
             <Route path="/register" render={() => <Register cookies={this.props.cookies} />}/>
             <Route path='/envelopes' render={() => <Envelopes cookies={this.props.cookies} />}/>
-            <Route path="/login" render={() => <Login cookies={this.props.cookies} />} />
+            <Route path="/" render={() => <Login cookies={this.props.cookies} />} />
             <Route path="/transactions" render={() => <Transactions cookies={this.props.cookies} />} />
             <Route path="/income" render={() => <Income cookies={this.props.cookies} />} />
           </Switch>
