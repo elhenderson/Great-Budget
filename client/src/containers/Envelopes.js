@@ -173,10 +173,12 @@ const Envelopes = props => {
   const renderEnvelopes = () => {
       let envelopesArray = Object.entries(props.envelopes);
       const renderedEnvelopes = envelopesArray.map((envelopeInfo, index) => (
-          <p key={uuidv4()}>{envelopeInfo[0]} : {envelopeInfo[1]}
+        <div key={uuidv4()} style={{display: "flex", justifyContent: "center"}}>
+          <p style={{marginRight: "15px"}} >{envelopeInfo[0]} : {envelopeInfo[1]}</p>
           {/* <button onClick={() => openModal(envelopeInfo[0], envelopeInfo[1])}>Edit</button> */}
           <button onClick={() => onDeleteEnvelope(envelopeInfo[0])} >Delete</button>
-        </p>
+
+        </div>
       ))
 
     return renderedEnvelopes;
