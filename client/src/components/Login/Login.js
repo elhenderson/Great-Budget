@@ -38,9 +38,14 @@ const LoginForm = props => {
     }
   }
 
+  useEffect(() => {
+    
+  })
+
 
   return (
     <div className={styles.form}>
+      <h1>Login</h1>
       <Form onSubmit={values => {
         authHandler(values);
         

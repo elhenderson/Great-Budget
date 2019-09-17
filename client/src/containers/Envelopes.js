@@ -20,7 +20,7 @@ const modalStyles = {
   }
 };
 
-Modal.defaultStyles.overlay.color = 'gray';
+Modal.defaultStyles.background = 'gray';
 Modal.defaultStyles.overlay.background = 'gray';
 
 const renderField = ({
@@ -185,6 +185,8 @@ const Envelopes = props => {
   return (
 
     <div>
+      <h1>My Envelopes</h1>
+      <hr />
       {renderEnvelopes()}
       {renderModal()}
       <button onClick={() => openModal()}>Add Envelope</button>
