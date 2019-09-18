@@ -13,6 +13,7 @@ import {ToastContainer} from 'react-toastify'
 import '../node_modules/react-toastify/dist/ReactToastify.min.css'
 import '../node_modules/bootswatch/dist/darkly/bootstrap.min.css'
 import ProtectedRoute from './hoc/ProtectedRoute/ProtectedRoute'
+import '../node_modules/font-awesome/css/font-awesome.min.css';
 
 class App extends Component {
   render() {

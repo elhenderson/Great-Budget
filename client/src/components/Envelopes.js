@@ -7,6 +7,9 @@ import uuidv4 from 'uuid';
 import {Form, Field} from 'react-final-form';
 import {confirmAlert} from 'react-confirm-alert';
 import '../../node_modules/react-confirm-alert/src/react-confirm-alert.css'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faTrash, faEnvelope} from '@fortawesome/free-solid-svg-icons' 
+
 
 const modalStyles = {
   content : {
@@ -172,10 +175,10 @@ const Envelopes = props => {
   const renderEnvelopes = () => {
       let envelopesArray = Object.entries(props.envelopes);
       const renderedEnvelopes = envelopesArray.map((envelopeInfo, index) => (
-        <div key={uuidv4()} style={{display: "flex", justifyContent: "center"}}>
+        <div key={uuidv4()} style={{display: "flex", justifyContent: "center", margin: "auto"}}>
           <p style={{marginRight: "15px"}} >{envelopeInfo[0]} : {envelopeInfo[1]}</p>
           {/* <button onClick={() => openModal(envelopeInfo[0], envelopeInfo[1])}>Edit</button> */}
-          <button onClick={() => onDeleteEnvelope(envelopeInfo[0])} >Delete</button>
+          <FontAwesomeIcon style={{cursor: "pointer"}} icon={faTrash} onClick={() => onDeleteEnvelope(envelopeInfo[0])} />
 
         </div>
       ))
@@ -190,7 +193,7 @@ const Envelopes = props => {
       <hr />
       {renderEnvelopes()}
       {renderModal()}
-      <button onClick={() => openModal()}>Add Envelope</button>
+      <FontAwesomeIcon size="6x" icon={faEnvelope} style={{cursor: "pointer"}} onClick={() => openModal()} />
     </div>
   )
 }

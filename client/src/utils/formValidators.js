@@ -24,6 +24,11 @@ export const password = value =>
     </React.Fragment>
     : undefined
 
+export const currency = value => 
+value && !/(?=.*?\d)^\$?(([1-9]\d{0,2}(,\d{3})*)|\d+)?(\.\d{1,2})?$/i.test(value)
+  ? <p style={{color: 'red'}} ><FontAwesomeIcon key={uuidv4()} style={{color: 'red', marginRight: '5px'}} icon={faExclamationCircle} />Currency values only</p>
+  : undefined
+
 export const confirmPassword = (value, allValues) => value && value !== allValues.password
   ? <p style={{color: 'red'}} ><FontAwesomeIcon key={uuidv4()} style={{color: 'red', marginRight: '5px'}} icon={faExclamationCircle} />Passwords must match</p>
   : undefined

@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {connect} from 'react-redux';
 import {Form, Field} from 'react-final-form';
-import {required, composeValidators } from '../utils/formValidators';
+import {required, composeValidators, currency } from '../utils/formValidators';
 import * as envelopeActions from '../store/actions/evelope';
 import Modal from 'react-modal'
 import {toast} from 'react-toastify';
@@ -155,6 +155,7 @@ const Income = props => {
                 type="text"
                 component={renderField}
                 label="Amount"
+                validate={composeValidators(currency, required)}
               />
               <button type="submit" disabled={submitting, pristine}>
                 Submit

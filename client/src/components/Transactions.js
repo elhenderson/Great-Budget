@@ -6,6 +6,8 @@ import {connect} from 'react-redux';
 import Select from 'react-select';
 import * as transactionActions from '../store/actions/transaction';
 import {toast} from 'react-toastify';
+import {currency, required, composeValidators} from '../utils/formValidators'
+
 
 const modalStyles = {
   content : {
@@ -230,8 +232,9 @@ const Transactions = (props) => {
                     name="value"
                     value={envelopeValue}
                     onChange={e => setEnvelopeValue(e.target.value)}
+                    validate={composeValidators(currency, required)}
                   />
-                  <button type="submit" disabled={submitting, pristine}>
+                  <button type="submit" disabled={submitting || pristine || !selected}>
                     Submit
                   </button>
                 </div>
@@ -279,8 +282,9 @@ const Transactions = (props) => {
                     name="value"
                     value={envelopeValue}
                     onChange={e => setEnvelopeValue(e.target.value)}
+                    validate={composeValidators(currency, required)}
                   />
-                  <button type="submit" disabled={submitting, pristine}>
+                  <button type="submit" disabled={submitting || pristine || !selectedEnvToAdd || !selectedEnvToSubtract}>
                     Submit
                   </button>
                 </div>
