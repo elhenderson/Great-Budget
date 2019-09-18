@@ -4,13 +4,11 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import {Provider} from 'react-redux'
-import {createStore, combineReducers, applyMiddleware} from 'redux';
+import {createStore, applyMiddleware} from 'redux';
 import {BrowserRouter} from 'react-router-dom';
-import envelopeReducer from './store/reducers/envelope'
-import {reducer as formReducer} from 'redux-form';
 import thunk from 'redux-thunk';
 import rootReducer from "./store/reducers/index"
-import {CookiesProvider, withCookies} from 'react-cookie';
+import {CookiesProvider} from 'react-cookie';
 
 // import Register from './components/Register/Register';
 

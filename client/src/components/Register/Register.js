@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {Form, Field} from 'react-final-form';
 import {required, email as emailValidator, password as passwordValidator, confirmPassword as confirmPasswordValidator, composeValidators} from '../../utils/formValidators'
 import styles from './Register.module.css';
@@ -93,7 +93,7 @@ const RegisterForm = props => {
           </form>   
         )}  
       </Form>
-      <a href="/login" >Log in</a>
+      <a href="/" >Log in</a>
     </div>
 
   )

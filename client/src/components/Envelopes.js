@@ -1,5 +1,4 @@
-import React, {Component, useEffect, useState} from 'react';
-import ReactDOM from 'react-dom';
+import React, {useEffect, useState} from 'react';
 import Modal from 'react-modal'
 import {connect} from 'react-redux';
 // import Modal from '../components/UI/Modal/Modal';

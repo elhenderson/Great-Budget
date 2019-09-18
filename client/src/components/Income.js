@@ -1,11 +1,9 @@
-import React, {Component, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {connect} from 'react-redux';
 import {Form, Field} from 'react-final-form';
 import {required, composeValidators } from '../utils/formValidators';
 import * as envelopeActions from '../store/actions/evelope';
-import uuidv4 from 'uuid';
 import Modal from 'react-modal'
-import alertify from 'alertifyjs';
 import {toast} from 'react-toastify';
 
 Modal.defaultStyles.overlay.color = 'gray';
@@ -47,15 +45,16 @@ const Income = props => {
   // const [incomeSource, setIncomeSource] = useState();
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [incomeAmount, setIncomeAmount] = useState("0.00");
-  const [envelopesObj, setEnvelopesObj] = useState({})
+  // const [envelopesObj, setEnvelopesObj] = useState({})
 
   useEffect(() => {
-    initialEnvelopes();
-    setEnvelopesObj(props.envelopes)
-  }, [])
-  function initialEnvelopes() {
+    // initialEnvelopes();
     props.getEnvelopes();
-  }
+    // setEnvelopesObj(props.envelopes)
+  }, [])
+  // function initialEnvelopes() {
+  //   props.getEnvelopes();
+  // }
 
   const assignIncomeAmount = (income) => {
     setIncomeAmount(income);
@@ -165,7 +164,6 @@ const Income = props => {
         )}
       </Form>
       <Modal
-      style={{background: "gray"}}
       ariaHideApp={false}
       isOpen={modalIsOpen}
       onRequestClose={closeModal}
@@ -183,7 +181,7 @@ const Income = props => {
         onSubmit={(values) => {
           incomeOverageValidator(values) 
         }}>
-          {({handleSubmit, pristine, form, submitting}) => (
+          {({handleSubmit, pristine, submitting}) => (
             <form onSubmit={handleSubmit}>
               <div>
                 {envelopes()}

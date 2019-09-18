@@ -5,13 +5,19 @@ const Envelope = require("../models/Envelope");
 const User = require("../models/User");
 
 router.get("/", (req, res) => {
+  if (!jwt.decode(req.cookies.token)) {
+    res.json({success: false});
+    return
+  }
   const userId = jwt.decode(req.cookies.token).id;
-  console.log(userId)
   // console.log(`Cookies: ${JSON.stringify(req.cookies.token)}`)
   User.findOne({_id: userId})
   // .then((result) => res.json(result))
   .then((result) => res.json(result.envelopes))
-  .catch(err => console.log(err));
+  .catch(err => {
+    res.json({success: false})
+    console.log(err);
+  })
 });
 
 router.put("/", (req, res) => {

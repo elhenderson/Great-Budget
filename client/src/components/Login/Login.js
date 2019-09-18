@@ -5,6 +5,8 @@ import {required, email as emailValidator, password as passwordValidator, compos
 import styles from './Login.module.css';
 import {connect} from 'react-redux';
 import * as userActions from '../../store/actions/user';
+import {withRouter} from 'react-router-dom';
+import {toast} from 'react-toastify';
 
 const renderField = ({
   input,
@@ -26,7 +28,6 @@ const renderField = ({
 const LoginForm = props => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [userData, setUserData] = useState(props.user)
 
 
 
@@ -38,14 +39,18 @@ const LoginForm = props => {
     }
   }
 
-  useEffect(() => {
-    
-  })
+  const redirectNotice = () => {
+    if (props.location.state) {
+      toast.error("Unauthorized: You must be logged in.")
+    } 
+  }
 
 
   return (
     <div className={styles.form}>
-      <h1>Login</h1>
+      {redirectNotice()}
+      <h3>Great Budget</h3>
+      <h2>Login</h2>
       <Form onSubmit={values => {
         authHandler(values);
         
@@ -102,5 +107,5 @@ const mapDispatchToProps = dispatch => ({
   getUser: (user) => dispatch(userActions.getUser(user))
 })
 
-export default (connect(mapStateToProps, mapDispatchToProps)(LoginForm))
+export default (connect(mapStateToProps, mapDispatchToProps)(withRouter(LoginForm)))
 

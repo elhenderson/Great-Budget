@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react';
+import React from 'react';
 import uuidv4 from 'uuid';
 
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
@@ -13,7 +13,7 @@ export const email = value =>
     : undefined
 
 export const password = value => 
-  value && !/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/i.test(value)
+  value && !/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/i.test(value)
     ?  
     <React.Fragment key={uuidv4()}>
         <p style={{color: 'red'}} ><FontAwesomeIcon key={uuidv4()} style={{color: 'red', marginRight:      '5px'}} icon={faExclamationCircle} />Must contain at least 1 lowercase letter</p>

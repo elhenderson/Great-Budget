@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
-import classes from './Toolbar.module.css';
-import Transactions from '../../../containers/Transactions';
+import Transactions from '../../Transactions';
 import { connect } from 'react-redux';
 import * as transactionActions from '../../../store/actions/transaction';
 import {
@@ -10,11 +9,7 @@ import {
   NavbarBrand,
   Nav,
   NavItem,
-  NavLink,
-  UncontrolledDropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem } from 'reactstrap';
+  NavLink} from 'reactstrap';
 
 const Toolbar = (props) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -45,7 +40,7 @@ const Toolbar = (props) => {
 
     <div>
     <Navbar color="faded" light>
-      <NavbarBrand href="/" className="mr-auto">GreatBudget</NavbarBrand>
+      <NavbarBrand className="mr-auto">GreatBudget</NavbarBrand>
       <NavbarToggler onClick={toggle} className="mr-2" />
       <Collapse isOpen={isOpen} navbar>
         <Nav navbar>

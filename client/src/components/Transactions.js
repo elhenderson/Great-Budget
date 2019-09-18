@@ -6,7 +6,6 @@ import {connect} from 'react-redux';
 import Select from 'react-select';
 import * as transactionActions from '../store/actions/transaction';
 import {toast} from 'react-toastify';
-import {required, composeValidators} from '../utils/formValidators'
 
 const modalStyles = {
   content : {
@@ -43,9 +42,7 @@ const renderField = ({
 
 
 const Transactions = (props) => {
-  const [initialEnvelopeValue, setInitialEnvelopeValue] = useState();
   const [envelopeValue, setEnvelopeValue] = useState();
-  const [envelopeName, setEnvelopeName] = useState();
   const [selected, setSelected] = useState();
   const [selectedEnvToAdd, setSelectedEnvToAdd] = useState();
   const [selectedEnvToSubtract, setSelectedEnvToSubtract] = useState();
@@ -136,11 +133,12 @@ const Transactions = (props) => {
   }
 
   useEffect(() => {
-    initialEnvelopes();  
+    props.getEnvelopes();
   }, [])
 
   function initialEnvelopes() {
     props.getEnvelopes();
+
   }
 
   const mergeEnvelopeChanges = (amountToSubtract) => {
@@ -162,6 +160,9 @@ const Transactions = (props) => {
         toast.success("Transaction received!");
         props.isTransacting(false);
         setSelected("")
+        setTimeout( function() {
+          window.location.reload()
+        }, 1500)
       }
     }
   }
@@ -189,6 +190,9 @@ const Transactions = (props) => {
       props.isTransfering(false);
       setSelectedEnvToSubtract("");
       setSelectedEnvToAdd("");
+      setTimeout( function() {
+        window.location.reload()
+      }, 1500)
     } 
   }
 
