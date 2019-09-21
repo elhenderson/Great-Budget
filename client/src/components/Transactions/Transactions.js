@@ -74,9 +74,9 @@ const Transactions = (props) => {
     placeholder,
     meta: { touched, error, warning }
   }) => (
-    <div>
+    <div className="titleSpacing">
       <label>{label}</label>
-      <div>
+      <div >
         <Select 
           styles={selectStyle}
           name="envelope"
@@ -98,7 +98,7 @@ const Transactions = (props) => {
     placeholder,
     meta: { touched, error, warning }
   }) => (
-    <div>
+    <div className="titleSpacing">
       <label>{label}</label>
       <div>
         <Select 
@@ -122,7 +122,7 @@ const Transactions = (props) => {
     placeholder,
     meta: { touched, error, warning }
   }) => (
-    <div>
+    <div className="titleSpacing">
       <label>{label}</label>
       <div>
         <Select 
@@ -239,13 +239,17 @@ const Transactions = (props) => {
                   />
                   <p>{props.envelopes[selected]}</p>
                   <h4>Amount</h4>
-                  <Field
-                    component={renderField}
-                    name="value"
-                    value={envelopeValue}
-                    onChange={e => setEnvelopeValue(e.target.value)}
-                    validate={composeValidators(currency, required)}
-                  />
+                  <div className="titleSpacing">
+                    <Field
+                      
+                      component={renderField}
+                      name="value"
+                      value={envelopeValue}
+                      onChange={e => setEnvelopeValue(e.target.value)}
+                      validate={composeValidators(currency, required)}
+                    />
+                  </div>
+
                   <button type="submit" disabled={submitting || pristine || !selected}>
                     Submit
                   </button>
