@@ -1,0 +1,42 @@
+.ReactModal__Overlay {
+  
+  transition: background-color 500ms ease-in-out;
+  opacity: 0;
+  // width: 100%;
+  // height: 100%;
+  text-align: center;
+  // margin: auto;
+  // transform: translate(-50%, -50%);
+  // top: 50%;
+  // left: 50%;
+  // right: auto;
+  // bottom: auto;
+
+  &--after-open {
+    background-color: rgba(0,0,0,0.3);
+    opacity: 1;
+  }
+
+  &--before-close {
+    opacity: 0;
+  }
+}
+
+.ReactModal__Content {
+  transition: all 500ms ease-in-out;
+  transform: translateY(30px);
+  opacity: 0;
+  width: 50%;
+  height: 50%;
+  margin: auto;
+  // transform: translate(-50%, -50%);
+  // top: 50%;
+  // left: 50%;
+  // right: auto;
+  // bottom: auto;
+
+  &--after-open {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

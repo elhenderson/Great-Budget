@@ -6,8 +6,8 @@ import * as envelopeActions from '../store/actions/evelope';
 import Modal from 'react-modal'
 import {toast} from 'react-toastify';
 
-Modal.defaultStyles.overlay.color = 'gray';
-Modal.defaultStyles.overlay.background = 'gray';
+// Modal.defaultStyles.overlay.color = 'gray';
+// Modal.defaultStyles.overlay.background = 'gray';
 
 const renderField = ({
   input,

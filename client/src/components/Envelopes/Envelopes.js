@@ -2,13 +2,14 @@ import React, {useEffect, useState} from 'react';
 import Modal from 'react-modal'
 import {connect} from 'react-redux';
 // import Modal from '../components/UI/Modal/Modal';
-import * as envelopeActions from '../store/actions/evelope';
+import * as envelopeActions from '../../store/actions/evelope';
 import uuidv4 from 'uuid';
 import {Form, Field} from 'react-final-form';
 import {confirmAlert} from 'react-confirm-alert';
-import '../../node_modules/react-confirm-alert/src/react-confirm-alert.css'
+import '../../../node_modules/react-confirm-alert/src/react-confirm-alert.css'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faTrash, faEnvelope} from '@fortawesome/free-solid-svg-icons' 
+import './Envelopes.css'
 
 
 const modalStyles = {
@@ -22,8 +23,8 @@ const modalStyles = {
   }
 };
 
-Modal.defaultStyles.background = 'gray';
-Modal.defaultStyles.overlay.background = 'gray';
+// Modal.defaultStyles.background = 'gray';
+// Modal.defaultStyles.overlay.background = 'gray';
 
 const renderField = ({
   input,
@@ -103,7 +104,6 @@ const Envelopes = props => {
       ariaHideApp={false}
       isOpen={modalIsOpen}
       onRequestClose={closeModal}
-      style={modalStyles}
       contentLabel="Edit Envelope"
     >
       <h2>{envelopeName}</h2>
@@ -136,7 +136,6 @@ const Envelopes = props => {
       ariaHideApp={false}
       isOpen={modalIsOpen}
       onRequestClose={closeModal}
-      style={modalStyles}
       contentLabel="Edit Envelope"
     >
       <h2>Add Envelope</h2>

@@ -4,10 +4,10 @@ import Layout from './hoc/Layout';
 import {withCookies} from 'react-cookie';
 import {Route, Switch} from 'react-router-dom';
 // import Landing from "./containers/Landing/Landing";
-import Envelopes from './components/Envelopes';
+import Envelopes from './components/Envelopes/Envelopes';
 import Register from './components/Register/Register';
 import Login from './components/Login/Login';
-import Transactions from './components/Transactions';
+import Transactions from './components/Transactions/Transactions';
 import Income from './components/Income';
 import {ToastContainer} from 'react-toastify'
 import '../node_modules/react-toastify/dist/ReactToastify.min.css'

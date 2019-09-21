@@ -1,24 +1,38 @@
 import React, {useEffect, useState} from 'react';
-import * as envelopeActions from '../store/actions/evelope';
+import * as envelopeActions from '../../store/actions/evelope';
 import Modal from 'react-modal';
 import {Form, Field} from 'react-final-form';
 import {connect} from 'react-redux';
 import Select from 'react-select';
-import * as transactionActions from '../store/actions/transaction';
+import * as transactionActions from '../../store/actions/transaction';
 import {toast} from 'react-toastify';
-import {currency, required, composeValidators} from '../utils/formValidators'
+import {currency, required, composeValidators} from '../../utils/formValidators'
+import './Transactions.scss';
 
+Modal.defaultStyles = {};
 
-const modalStyles = {
-  content : {
-    transition: 'bottom 1s ease-out',
-    transform: 'translate(-50%, -50%)',
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto'
+// const modalStyles = {
+//   content : {
+//     transition: 'bottom 1s ease-out',
+//     transform: 'translate(-50%, -50%)',
+//     top: '50%',
+//     left: '50%',
+//     right: 'auto',
+//     bottom: 'auto',
+//     animation: 'fadein 2s'
+//   }
+// };
+
+const selectStyle = {
+  option: (provided, state) => ({
+    ...provided,
+    color: 'black'
+  }),
+  singleValue: (provided, state) => {
+    return {...provided}
   }
-};
+}
+
 
 
 const renderField = ({
@@ -64,6 +78,7 @@ const Transactions = (props) => {
       <label>{label}</label>
       <div>
         <Select 
+          styles={selectStyle}
           name="envelope"
           value={{label: selected, value: selected}}
           onChange={handleChange}
@@ -87,6 +102,7 @@ const Transactions = (props) => {
       <label>{label}</label>
       <div>
         <Select 
+          styles={selectStyle}
           name="envelope"
           value={{label: selectedEnvToAdd, value: selectedEnvToAdd}}
           onChange={handleEnvToAdd}
@@ -110,6 +126,7 @@ const Transactions = (props) => {
       <label>{label}</label>
       <div>
         <Select 
+          styles={selectStyle}
           name="envelope"
           value={{label: selectedEnvToSubtract, value: selectedEnvToSubtract}}
           onChange={handleEnvToSubtract}
@@ -201,21 +218,14 @@ const Transactions = (props) => {
   const renderTransactions = () => {
       if (props.transacting)  return (
         <Modal
+          onRequestClose={() => props.isTransacting(false)}
           ariaHideApp={false}
           isOpen={props.transacting}
-          style={modalStyles}
+          style={{}}
           contentLabel="Add Transaction"
         >
           <h2>Add Transaction</h2>
           <hr/>
-          <div>
-            <button 
-              onClick={() => props.isTransacting(false)}
-              style={{position: 'fixed', right: '2px', top: '2px'}} 
-            >
-              X
-            </button>
-          </div>
 
           <Form onSubmit={value => {
             mergeEnvelopeChanges(value)
@@ -223,10 +233,12 @@ const Transactions = (props) => {
             {({handleSubmit, pristine, submitting}) => (
               <form onSubmit={handleSubmit}>
                 <div>
+                  <h4>Envelope Name</h4>
                   <Field 
                     component={renderSelect}
                   />
                   <p>{props.envelopes[selected]}</p>
+                  <h4>Amount</h4>
                   <Field
                     component={renderField}
                     name="value"
@@ -237,6 +249,9 @@ const Transactions = (props) => {
                   <button type="submit" disabled={submitting || pristine || !selected}>
                     Submit
                   </button>
+                  <button type="button" onClick={() => props.isTransacting(false)}>
+                    Cancel
+                  </button>
                 </div>
               </form>
             )}
@@ -245,21 +260,14 @@ const Transactions = (props) => {
       ) 
       else if (props.transfering) return (
         <Modal
+          onRequestClose={() => props.isTransfering(false)}
           ariaHideApp={false}
           isOpen={props.transfering}
-          style={modalStyles}
+          style={{}}
           contentLabel="Transfer Funds"
         >
           <h2>Transfer Funds</h2>
           <hr/>
-          <div>
-            <button 
-              onClick={() => props.isTransfering(false)}
-              style={{position: 'fixed', right: '2px', top: '2px'}} 
-            >
-              X
-            </button>
-          </div>
 
           <Form onSubmit={value => {
             transferFundsChanges(value)
@@ -286,6 +294,9 @@ const Transactions = (props) => {
                   />
                   <button type="submit" disabled={submitting || pristine || !selectedEnvToAdd || !selectedEnvToSubtract}>
                     Submit
+                  </button>
+                  <button type="button" onClick={() => props.isTransfering(false)}>
+                    Cancel
                   </button>
                 </div>
               </form>

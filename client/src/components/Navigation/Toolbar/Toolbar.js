@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import Transactions from '../../Transactions';
+import Transactions from '../../Transactions/Transactions';
 import { connect } from 'react-redux';
 import * as transactionActions from '../../../store/actions/transaction';
 import {

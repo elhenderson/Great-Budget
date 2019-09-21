@@ -1,0 +1,27 @@
+.ReactModal__Overlay {
+  transition: background-color 500ms ease-in-out;
+  opacity: 0;
+  text-align: center;
+}
+.ReactModal__Overlay--after-open {
+  background-color: rgba(0, 0, 0, 0.3);
+  opacity: 1;
+}
+.ReactModal__Overlay--before-close {
+  opacity: 0;
+}
+
+.ReactModal__Content {
+  transition: all 500ms ease-in-out;
+  transform: translateY(30px);
+  opacity: 0;
+  width: 50%;
+  height: 50%;
+  margin: auto;
+}
+.ReactModal__Content--after-open {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/*# sourceMappingURL=Envelopes.css.map */
