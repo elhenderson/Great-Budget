@@ -9,6 +9,11 @@ const envelopeReducer = (state = initialState, action) => {
         ...state,
         envelopes: action.payload
       }
+    case actionTypes.GET_UNALLOCATED:
+      return {
+        ...state,
+        unallocated: action.payload
+      }
     case actionTypes.EDIT_ENVELOPES:
       return {
         ...state

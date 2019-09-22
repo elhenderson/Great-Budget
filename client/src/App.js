@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './App.css';
+import './App.scss';
 import Layout from './hoc/Layout';
 import {withCookies} from 'react-cookie';
 import {Route, Switch} from 'react-router-dom';
@@ -14,6 +14,9 @@ import '../node_modules/react-toastify/dist/ReactToastify.min.css'
 import '../node_modules/bootswatch/dist/darkly/bootstrap.min.css'
 import ProtectedRoute from './hoc/ProtectedRoute/ProtectedRoute'
 import '../node_modules/font-awesome/css/font-awesome.min.css';
+import Modal from 'react-modal';
+
+
 
 class App extends Component {
   render() {

@@ -79,7 +79,7 @@ const RegisterForm = props => {
                 type="password"
                 component={renderField}
                 label="Confirm Password"
-                placeholder="Enter your password again"
+                placeholder="Confirm your password"
               />
             </div>
             <div>

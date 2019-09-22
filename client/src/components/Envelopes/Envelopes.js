@@ -10,21 +10,27 @@ import '../../../node_modules/react-confirm-alert/src/react-confirm-alert.css'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faTrash, faEnvelope} from '@fortawesome/free-solid-svg-icons' 
 import './Envelopes.css'
+import { toast } from 'react-toastify';
 
 
-const modalStyles = {
-  content : {
-    transition: 'bottom 1s ease-out',
-    transform: 'translate(-50%, -50%)',
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto'
-  }
-};
+// const modalStyles = {
+//   content : {
+//     transition: 'bottom 1s ease-out',
+//     transform: 'translate(-50%, -50%)',
+//     top: '50%',
+//     left: '50%',
+//     right: 'auto',
+//     bottom: 'auto'
+//   }
+// };
 
 // Modal.defaultStyles.background = 'gray';
 // Modal.defaultStyles.overlay.background = 'gray';
+
+const prevPage = document.referrer
+if (prevPage.slice(-1) === '/') {
+  toast.success("Login successful!")
+}
 
 const renderField = ({
   input,
@@ -50,6 +56,7 @@ const Envelopes = props => {
   const [envelopeName, setEnvelopeName] = useState();
   const [initialEnvelopeValue, setInitialEnvelopeValue] = useState();
 
+  console.log(props.envelopes)
 
   useEffect(() => {
     initialEnvelopes();
@@ -68,6 +75,7 @@ const Envelopes = props => {
 
   function initialEnvelopes() {
     props.getEnvelopes();
+    props.getUnallocated();
   }
 
   const mergeEnvelopeChanges = (envelopeToChange, value) => {
@@ -190,6 +198,8 @@ const Envelopes = props => {
     <div>
       <h1>My Envelopes</h1>
       <hr />
+      {props.unallocated ? <h5>Unallocated: {props.unallocated}</h5> : null}
+      <br/>
       {renderEnvelopes()}
       {renderModal()}
       <FontAwesomeIcon size="6x" icon={faEnvelope} style={{cursor: "pointer"}} onClick={() => openModal()} />
@@ -198,7 +208,8 @@ const Envelopes = props => {
 }
 
 const mapStateToProps = state => ({
-  envelopes: state.envelope.envelopes
+  envelopes: state.envelope.envelopes,
+  unallocated: state.envelope.unallocated
 })
 
  
@@ -206,6 +217,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   getEnvelopes:() => dispatch(envelopeActions.getEnvelopes()),
+  getUnallocated: () => dispatch(envelopeActions.getUnallocated()),
   editEnvelopes:(envelopes) => dispatch(envelopeActions.editEnvelopes(envelopes)),
   addEnvelope: (envelope) => dispatch(envelopeActions.addEnvelope(envelope)),
   deleteEnvelope: (envelopeToDelete, value) => dispatch(envelopeActions.deleteEnvelope(envelopeToDelete, value))

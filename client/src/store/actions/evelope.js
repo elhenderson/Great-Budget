@@ -15,9 +15,26 @@ export const getEnvelopes = () => dispatch => {
     // envelopeName: name
 }
 
+export const getUnallocated = () => dispatch => {
+  axios
+  .get('/api/envelopes/unallocated')
+  .then(res => 
+    dispatch({
+      type: actionTypes.GET_UNALLOCATED,
+      payload: res.data
+    })  
+  )
+}
+
 export const editEnvelopes = (envelopes) => dispatch => {
   axios
   .put('/api/envelopes', {envelopes})
+}
+
+export const editUnallocated = (unallocated) => dispatch => {
+  console.log(unallocated)
+  axios
+  .put('/api/envelopes/unallocated', {unallocated})
 }
 
 export const addEnvelope = (envelope) => {

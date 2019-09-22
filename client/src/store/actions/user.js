@@ -2,6 +2,7 @@ import axios from 'axios';
 import {GET_USER, ADD_USER} from './actionTypes';
 import {toast} from 'react-toastify';
 import Cookies from 'universal-cookie';
+import Envelopes from '../../components/Envelopes/Envelopes'
 
 const cookies = new Cookies();
 
@@ -16,10 +17,7 @@ export const getUser = (user) => dispatch => {
   )
   .then(res => {
     cookies.set('token', res.payload.token, {path: '/'});
-    setTimeout(() => {
-      window.location.href = "/envelopes"
-    }, 1500)
-    toast.success("Login successful!")
+    window.location.href = "/envelopes"
   })
   .catch((error) => {
     toast.error("Unable to login")

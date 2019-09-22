@@ -62,10 +62,15 @@ const Transactions = (props) => {
   const [selected, setSelected] = useState();
   const [selectedEnvToAdd, setSelectedEnvToAdd] = useState();
   const [selectedEnvToSubtract, setSelectedEnvToSubtract] = useState();
+  const [isUnallocated, setIsUnallocated] = useState();
 
   const envelopeNames = Object.keys(props.envelopes).map(envelopeName => (
     {value: envelopeName, label: envelopeName}
   ))
+
+  envelopeNames.unshift({value: "unallocated", label: "unallocated"});
+
+  const addEnvNames = envelopeNames.slice(1);
 
   const renderSelect = ({
     input,
@@ -106,7 +111,7 @@ const Transactions = (props) => {
           name="envelope"
           value={{label: selectedEnvToAdd, value: selectedEnvToAdd}}
           onChange={handleEnvToAdd}
-          options={envelopeNames}
+          options={addEnvNames}
         />
         {touched &&
           ((error && <span >{error}</span>) ||
@@ -140,6 +145,7 @@ const Transactions = (props) => {
   )
 
   const handleChange = selectedOption => {
+    selectedOption.value === "unallocated" ? setIsUnallocated(true) : setIsUnallocated(false)
     setSelected(selectedOption.value);
   }
 
@@ -148,6 +154,7 @@ const Transactions = (props) => {
   }
 
   const handleEnvToSubtract = selectedOption => {
+    selectedOption.value === "unallocated" ? setIsUnallocated(true) : setIsUnallocated(false)
     setSelectedEnvToSubtract(selectedOption.value);
   }
 
@@ -168,20 +175,25 @@ const Transactions = (props) => {
 
       const newEnvelopeValue = currentEnvelopeValue - amountToSubtract.value
 
-      const updatedEnvelopesObj = {
+      const newUnallocatedValue = isUnallocated ? +props.unallocated - +amountToSubtract.value : +props.unallocated
+
+      const updatedEnvelopesObj = isUnallocated ? {
+        ...props.envelopes
+      } : {
         ...props.envelopes,
         [selected] : newEnvelopeValue.toFixed(2)
       }
 
+ 
+
       if (newEnvelopeValue < 0) toast.error("Insufficient funds")
       else {
-        props.editEnvelopes(updatedEnvelopesObj);
+        isUnallocated ? props.editUnallocated(newUnallocatedValue) : props.editEnvelopes(updatedEnvelopesObj);
         toast.success("Transaction received!");
         props.isTransacting(false);
         setSelected("")
-        setTimeout( function() {
-          window.location.reload()
-        }, 1500)
+        isUnallocated ? props.getUnallocated() : props.getEnvelopes();
+        setIsUnallocated(false);
       }
     }
   }
@@ -189,14 +201,22 @@ const Transactions = (props) => {
   const transferFundsChanges = (amountToTransfer) => {
     if (!selectedEnvToSubtract) toast.warn("Please specify an envelope")
     if (!selectedEnvToAdd) toast.warn("Please specify an envelope")
+    if (selectedEnvToAdd === selectedEnvToSubtract) {
+      toast.warn("You cannot transfer to the same envelope.")
+      return
+    } 
 
-    const envToSubtract = props.envelopes[selectedEnvToSubtract]
+    const envToSubtract = props.envelopes[selectedEnvToSubtract] || props.unallocated
     const envToAdd = props.envelopes[selectedEnvToAdd]
 
     const newFromEnvValue = +envToSubtract - +amountToTransfer.value
     const newToEnvValue = +envToAdd + +amountToTransfer.value
+    const newUnallocatedValue = isUnallocated ? +props.unallocated - +amountToTransfer.value : +props.unallocated 
 
-    const updatedEnvelopesObj = {
+    const updatedEnvelopesObj = isUnallocated ? {
+      ...props.envelopes,
+      [selectedEnvToAdd]: newToEnvValue.toFixed(2)
+    } : {
       ...props.envelopes,
       [selectedEnvToSubtract]: newFromEnvValue.toFixed(2),
       [selectedEnvToAdd]: newToEnvValue.toFixed(2)
@@ -205,13 +225,14 @@ const Transactions = (props) => {
     if (newFromEnvValue < 0) toast.error("Insufficient funds")
     else {
       props.editEnvelopes(updatedEnvelopesObj);
+      props.editUnallocated(newUnallocatedValue.toFixed(2))
       toast.success("Transfer successful!");
       props.isTransfering(false);
       setSelectedEnvToSubtract("");
       setSelectedEnvToAdd("");
-      setTimeout( function() {
-        window.location.reload()
-      }, 1500)
+      props.getEnvelopes();
+      props.getUnallocated();
+      setIsUnallocated(false)
     } 
   }
 
@@ -221,7 +242,7 @@ const Transactions = (props) => {
           onRequestClose={() => props.isTransacting(false)}
           ariaHideApp={false}
           isOpen={props.transacting}
-          style={{}}
+          
           contentLabel="Add Transaction"
         >
           <h2>Add Transaction</h2>
@@ -237,7 +258,7 @@ const Transactions = (props) => {
                   <Field 
                     component={renderSelect}
                   />
-                  <p>{props.envelopes[selected]}</p>
+                  <p>{isUnallocated ? props.unallocated :  props.envelopes[selected]}</p>
                   <h4>Amount</h4>
                   <div className="titleSpacing">
                     <Field
@@ -267,7 +288,7 @@ const Transactions = (props) => {
           onRequestClose={() => props.isTransfering(false)}
           ariaHideApp={false}
           isOpen={props.transfering}
-          style={{}}
+          
           contentLabel="Transfer Funds"
         >
           <h2>Transfer Funds</h2>
@@ -283,13 +304,14 @@ const Transactions = (props) => {
                   <Field 
                     component={envToSubtractSelect}
                   />
-                  <p>{props.envelopes[selectedEnvToSubtract]}</p>
+                  <p>{isUnallocated ? props.unallocated :  props.envelopes[selectedEnvToSubtract]}</p>
                   <h3>To</h3>
                   <Field
                     component={envToAddSelect}
                   />
                   <p>{props.envelopes[selectedEnvToAdd]}</p>
                   <Field
+                    label={<h3>Amount</h3>}
                     component={renderField}
                     name="value"
                     value={envelopeValue}
@@ -318,13 +340,16 @@ const Transactions = (props) => {
 
 const mapStateToProps = state => ({
   envelopes: state.envelope.envelopes,
+  unallocated: state.envelope.unallocated,
   transacting: state.transactions.transacting,
   transfering: state.transactions.transfering
 })
 
 const mapDispatchToProps = dispatch => ({
   getEnvelopes:() => dispatch(envelopeActions.getEnvelopes()),
+  getUnallocated: () => dispatch(envelopeActions.getUnallocated()),
   editEnvelopes:(envelopes) => dispatch(envelopeActions.editEnvelopes(envelopes)),
+  editUnallocated: (value) => dispatch(envelopeActions.editUnallocated(value)),
   isTransacting: (isTransacting) => dispatch(transactionActions.isTransacting(isTransacting)),
   isTransfering: (isTransfering) => dispatch(transactionActions.transferFunds(isTransfering))
 })

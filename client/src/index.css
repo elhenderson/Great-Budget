@@ -17,3 +17,7 @@ code {
 form button {
   border-radius: 5px;
 }
+
+input {
+  border-radius: 3px;
+}

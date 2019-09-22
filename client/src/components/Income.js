@@ -27,16 +27,16 @@ const renderField = ({
   </div>
 )
 
-const modalStyles = {
-  content : {
-    transition: 'bottom 1s ease-out',
-    transform: 'translate(-50%, -50%)',
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto'
-  }
-};
+// const modalStyles = {
+//   content : {
+//     transition: 'bottom 1s ease-out',
+//     transform: 'translate(-50%, -50%)',
+//     top: '50%',
+//     left: '50%',
+//     right: 'auto',
+//     bottom: 'auto'
+//   }
+// };
 
 let incomeOverageMessage = ""
 
@@ -50,6 +50,7 @@ const Income = props => {
   useEffect(() => {
     // initialEnvelopes();
     props.getEnvelopes();
+    props.getUnallocated();
     // setEnvelopesObj(props.envelopes)
   }, [])
   // function initialEnvelopes() {
@@ -71,6 +72,7 @@ const Income = props => {
 
   const incomeOverageValidator = (values) => {
     let currentEnvelopesArray = Object.entries(props.envelopes);
+    let unallocated = +incomeAmount + +props.unallocated;
     const currentEnvelopes = currentEnvelopesArray.map(envelopeInfo => {
       return envelopeInfo[1]
     })
@@ -78,6 +80,7 @@ const Income = props => {
     let toAddEnvelopesArray = Object.entries(values)
     const toAddEnvelopes = toAddEnvelopesArray.map((envelopeInfo, index) => {
       const newEnvelopeAmount = (+envelopeInfo[1] + +currentEnvelopes[index]).toFixed(2)
+      unallocated -= +envelopeInfo[1]
       return newEnvelopeAmount
     })
 
@@ -90,8 +93,17 @@ const Income = props => {
       for (let i = 0; i < toAddEnvelopes.length; i++) {
         envelopeObj[currentEnvelopesArray[i][0]] = toAddEnvelopes[i]
       }
-      props.editEnvelopes(envelopeObj);
-      window.location.reload();
+      const updatedEnvelopesObj = {
+        ...props.envelopes,
+        ...envelopeObj
+
+      }
+      props.editEnvelopes(updatedEnvelopesObj);
+      props.editUnallocated(unallocated.toFixed(2))
+      setModalIsOpen(false);
+      toast.success("Income added!")
+      props.getEnvelopes();
+      props.getUnallocated();
     } else {
       toast.error('Error: Envelope total exceeds income amount!', {
         position: "top-right",
@@ -115,6 +127,7 @@ const Income = props => {
             type="text"
             component={renderField}
             label={envelopeInfo[0]}
+            validate={composeValidators(currency)}
           />
         </div>
     ))
@@ -148,14 +161,13 @@ const Income = props => {
                 placeholder="My Employer"
               />
               <Field
-                validate={composeValidators(required)}
+                validate={composeValidators(required, currency)}
                 onChange={e => setIncomeAmount(e.target.value)}
                 value={incomeAmount}
                 name="incomeAmount"
                 type="text"
                 component={renderField}
                 label="Amount"
-                validate={composeValidators(currency, required)}
               />
               <button type="submit" disabled={submitting, pristine}>
                 Submit
@@ -168,7 +180,7 @@ const Income = props => {
       ariaHideApp={false}
       isOpen={modalIsOpen}
       onRequestClose={closeModal}
-      style={modalStyles}
+      
       contentLabel="Edit Envelope"
       >
         <h3>Plan your finances</h3>
@@ -186,7 +198,7 @@ const Income = props => {
             <form onSubmit={handleSubmit}>
               <div>
                 {envelopes()}
-                <button type="submit" disabled={submitting, pristine} >Submit</button>
+                <button type="submit" disabled={submitting} >Submit</button>
               </div>
             </form>
           )}
@@ -197,7 +209,8 @@ const Income = props => {
 }
 
 const mapStateToProps = state => ({
-  envelopes: state.envelope.envelopes
+  envelopes: state.envelope.envelopes,
+  unallocated: state.envelope.unallocated
 })
 
  
@@ -205,7 +218,9 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   getEnvelopes:() => dispatch(envelopeActions.getEnvelopes()),
-  editEnvelopes:(envelopes) => dispatch(envelopeActions.editEnvelopes(envelopes))
+  getUnallocated: () => dispatch(envelopeActions.getUnallocated()),
+  editEnvelopes:(envelopes) => dispatch(envelopeActions.editEnvelopes(envelopes)),
+  editUnallocated:(amount) => dispatch(envelopeActions.editUnallocated(amount))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Income);

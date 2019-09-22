@@ -70,7 +70,7 @@ const LoginForm = props => {
 
             />
             </div>
-            <div>
+            <div className="inputSpacing">
             <Field 
               validate={composeValidators(required, passwordValidator)}
               onChange={e => setPassword(e.target.value)}
