@@ -13,3 +13,5 @@ export const transferFunds = (isTransfering) => dispatch => {
     payload: isTransfering
   })
 }
+
+// export const addToHistory = (value, )

@@ -62,6 +62,7 @@ const Income = props => {
     openModal();
   }
 
+
   const openModal = () => {
     setModalIsOpen(true);
   }
@@ -70,32 +71,25 @@ const Income = props => {
     setModalIsOpen(false);
   }
 
-  const incomeOverageValidator = (values) => {
-    let currentEnvelopesArray = Object.entries(props.envelopes);
+  const incomeOverageValidator = (envelopes) => {
     let unallocated = +incomeAmount + +props.unallocated;
-    const currentEnvelopes = currentEnvelopesArray.map(envelopeInfo => {
-      return envelopeInfo[1]
-    })
-    
-    let toAddEnvelopesArray = Object.entries(values)
-    const toAddEnvelopes = toAddEnvelopesArray.map((envelopeInfo, index) => {
-      const newEnvelopeAmount = (+envelopeInfo[1] + +currentEnvelopes[index]).toFixed(2)
-      unallocated -= +envelopeInfo[1]
-      return newEnvelopeAmount
-    })
-
     let envelopesTotal = 0;
-    for (let envelopeValue in values) {
-      envelopesTotal += +values[envelopeValue]
+    let envelopesCopy = {...envelopes}
+
+    for (let envelopeName in envelopesCopy) {
+      unallocated -= parseInt(envelopesCopy[envelopeName])
+      envelopesTotal += parseFloat(envelopesCopy[envelopeName])
+      
+      envelopesCopy[envelopeName] = parseFloat(envelopesCopy[envelopeName])
+      envelopesCopy[envelopeName] = +envelopesCopy[envelopeName] + +props.envelopes[envelopeName]
+      envelopesCopy[envelopeName] = envelopesCopy[envelopeName].toFixed(2)
+
     }
-    if (envelopesTotal <= incomeAmount) {
-      let envelopeObj = values
-      for (let i = 0; i < toAddEnvelopes.length; i++) {
-        envelopeObj[currentEnvelopesArray[i][0]] = toAddEnvelopes[i]
-      }
+
+    if (+envelopesTotal <= +incomeAmount) {
       const updatedEnvelopesObj = {
         ...props.envelopes,
-        ...envelopeObj
+        ...envelopesCopy
 
       }
       props.editEnvelopes(updatedEnvelopesObj);
@@ -169,7 +163,7 @@ const Income = props => {
                 component={renderField}
                 label="Amount"
               />
-              <button type="submit" disabled={submitting, pristine}>
+              <button type="submit"  disabled={submitting, pristine}>
                 Submit
               </button>
             </div>
@@ -192,9 +186,10 @@ const Income = props => {
         </p>
         <Form 
         onSubmit={(values) => {
+          console.log(values)
           incomeOverageValidator(values) 
         }}>
-          {({handleSubmit, pristine, submitting}) => (
+          {({handleSubmit, pristine, submitting, form}) => (
             <form onSubmit={handleSubmit}>
               <div>
                 {envelopes()}
