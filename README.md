@@ -2,6 +2,8 @@
 
 ## A budgeting app based on the envelope system popularized by Dave Ramsey.
 
+## Live Demo: https://great-budget.herokuapp.com
+
 ### Built with React, Redux, ExpressJS and MongoDb.
 
 ![image](https://user-images.githubusercontent.com/43661059/65467486-20639a00-de27-11e9-8fe8-918a23781824.png)
