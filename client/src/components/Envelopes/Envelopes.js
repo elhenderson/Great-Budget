@@ -27,11 +27,8 @@ import { toast } from 'react-toastify';
 // Modal.defaultStyles.background = 'gray';
 // Modal.defaultStyles.overlay.background = 'gray';
 
-const prevPage = document.referrer
-console.log(prevPage)
-if (prevPage.slice(-1) === '/' || prevPage.slice(-1) === '/logout') {
-  toast.success("Login successful!")
-}
+
+
 
 const renderField = ({
   input,
@@ -57,12 +54,17 @@ const Envelopes = props => {
   const [envelopeName, setEnvelopeName] = useState();
   const [initialEnvelopeValue, setInitialEnvelopeValue] = useState();
 
-  console.log(props.envelopes)
-
   useEffect(() => {
     initialEnvelopes();
-    
+    loginNotification();
   }, [])
+
+  const loginNotification = () => {
+    const prevPage = document.referrer
+    if (prevPage.slice(-1) === '/' || prevPage.slice(-1) === '/logout') {
+      toast.success("Login successful!")
+    }
+  }
 
   const openModal = (envelopeNameToSet, initialEnvelopeValueToSet) => {
     setEnvelopeName(envelopeNameToSet);
