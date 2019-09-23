@@ -10,9 +10,15 @@ import {
   Nav,
   NavItem,
   NavLink} from 'reactstrap';
+import Cookies from 'universal-cookie';
+import {Redirect} from 'react-router-dom';
+import Login from '../../Login/Login';
+import {withRouter} from 'react-router-dom';
 
 const Toolbar = (props) => {
   const [isOpen, setIsOpen] = useState(false);
+
+  const cookies = new Cookies();
 
   const transferToggle = () => {
     props.isTransacting(false);
@@ -26,6 +32,11 @@ const Toolbar = (props) => {
 
   const toggle = () => {
     setIsOpen(!isOpen)
+  }
+
+  const logout = () => {
+    cookies.remove("token");
+    window.location.href = "/logout"
   }
 
   return (
@@ -54,7 +65,10 @@ const Toolbar = (props) => {
             <NavLink style={{cursor: "pointer", float: "left"}} onClick={() => transferToggle()}>Transfer Funds</NavLink>
           </NavItem>
           <NavItem >
-          <NavLink style={{cursor: "pointer", float: "left"}} href="/envelopes">My Envelopes</NavLink>
+            <NavLink style={{cursor: "pointer", float: "left"}} href="/envelopes">My Envelopes</NavLink>
+          </NavItem>
+          <NavItem >
+            <NavLink style={{cursor: "pointer", float: "left"}} onClick={() => logout()}>Log out</NavLink>
           </NavItem>
         </Nav>
       </Collapse>
@@ -70,4 +84,4 @@ const mapDispatchToProps = dispatch => ({
   isTransfering: (isTransfering) => dispatch(transactionActions.transferFunds(isTransfering))
 })
 
-export default connect(null, mapDispatchToProps)(Toolbar);
+export default connect(null, mapDispatchToProps)(withRouter(Toolbar));

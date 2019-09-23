@@ -15,6 +15,9 @@ const UserSchema = new Schema({
   },
   unallocated: {
     type: String
+  },
+  history: {
+    type: Array
   }
 });
 

@@ -21,7 +21,15 @@ router.post('/register', async (req, res) => {
     unallocated: "0.00"
   });
   await newUser.save()
-  .then((result) => res.json(result));
+  await User.findOne({email: req.body.email})
+  .then((user) => {
+    const token = jwt.sign({id: user._id}, keys.keys.private)
+      res.json({
+        success: true,
+        message: 'Authentication successful',
+        token: token
+      })
+  });
 });
 
 

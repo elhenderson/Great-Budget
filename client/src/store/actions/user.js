@@ -34,9 +34,10 @@ export const addUser = (user) => dispatch => {
     })
   )
   .then(res => {
+    cookies.set('token', res.payload.token, {path: '/'});
     toast.success("Registration successful!")
     setTimeout(() => {
-      window.location.href = "/login"
+      window.location.href = "/"
     }, 1500)
 
   })

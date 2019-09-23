@@ -28,7 +28,8 @@ import { toast } from 'react-toastify';
 // Modal.defaultStyles.overlay.background = 'gray';
 
 const prevPage = document.referrer
-if (prevPage.slice(-1) === '/' && window.location.pathname !== "/register") {
+console.log(prevPage)
+if (prevPage.slice(-1) === '/' || prevPage.slice(-1) === '/logout') {
   toast.success("Login successful!")
 }
 

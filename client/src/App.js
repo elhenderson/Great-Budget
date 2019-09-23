@@ -14,7 +14,7 @@ import '../node_modules/react-toastify/dist/ReactToastify.min.css'
 import '../node_modules/bootswatch/dist/darkly/bootstrap.min.css'
 import ProtectedRoute from './hoc/ProtectedRoute/ProtectedRoute'
 import '../node_modules/font-awesome/css/font-awesome.min.css';
-import Modal from 'react-modal';
+import History from './components/History/History'
 
 
 
@@ -26,10 +26,12 @@ class App extends Component {
           <Switch>
             <Route path="/" exact render={() => <Login cookies={this.props.cookies} />} />
             <Route path="/register" render={() => <Register cookies={this.props.cookies} />}/>
+            <Route path="/logout" render={() => <Login loggedOut={true} />}/>
             <Layout>
               <ProtectedRoute path='/envelopes' component={Envelopes} />
               <ProtectedRoute path='/transactions' component={Transactions} />
               <ProtectedRoute path='/income' component={Income} />
+              <ProtectedRoute path='/history' component={History} />
             </Layout>
           </Switch>
           <ToastContainer />

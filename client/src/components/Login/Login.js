@@ -7,6 +7,7 @@ import {connect} from 'react-redux';
 import * as userActions from '../../store/actions/user';
 import {withRouter} from 'react-router-dom';
 import {toast} from 'react-toastify';
+import Cookies from 'universal-cookie';
 
 const renderField = ({
   input,
@@ -29,7 +30,16 @@ const LoginForm = props => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const cookies = new Cookies();
 
+  if (cookies.get('token')) {
+    console.log("Cookies here")
+    window.location.href="/envelopes"
+  }
+
+  if (props.loggedOut) {
+    toast.info("Logged out")
+  }
 
   const authHandler = async (values) => {
     try {
@@ -38,6 +48,7 @@ const LoginForm = props => {
       console.log(err);
     }
   }
+
 
   const redirectNotice = () => {
     if (props.location.state) {
@@ -58,29 +69,29 @@ const LoginForm = props => {
         {({handleSubmit, pristine, form, submitting}) => (
           <form onSubmit={handleSubmit}>
             <div >
-            <Field
-            validate={composeValidators(required, emailValidator)}
-              onChange={e => setEmail(e.target.value)}
-              value={email}
-              name="email"
-              type="email"
-              component={renderField}
-              label="Email"
-              placeholder="Enter a valid email"
+              <Field
+              validate={composeValidators(required, emailValidator)}
+                onChange={e => setEmail(e.target.value)}
+                value={email}
+                name="email"
+                type="email"
+                component={renderField}
+                label="Email"
+                placeholder="Enter a valid email"
 
-            />
+              />
             </div>
             <div className="inputSpacing">
-            <Field 
-              validate={composeValidators(required, passwordValidator)}
-              onChange={e => setPassword(e.target.value)}
-              value={password}
-              name="password"
-              type="password"
-              component={renderField}
-              label="Password"
-              placeholder="Enter your password"
-            />
+              <Field 
+                validate={composeValidators(required, passwordValidator)}
+                onChange={e => setPassword(e.target.value)}
+                value={password}
+                name="password"
+                type="password"
+                component={renderField}
+                label="Password"
+                placeholder="Enter your password"
+              />
             </div>
             <div>
             <button type="submit"  disabled={submitting}>
