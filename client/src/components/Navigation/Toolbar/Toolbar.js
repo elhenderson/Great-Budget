@@ -54,21 +54,27 @@ const Toolbar = (props) => {
       <NavbarToggler onClick={toggle} className="mr-2" />
       <Collapse isOpen={isOpen} navbar>
         <Nav navbar>
+          <div className="divider" />
           <NavItem>
             <NavLink href="/income" style={{}}>Add Income</NavLink>
           </NavItem>
+          <div className="divider" />
           <NavItem>
             <NavLink style={{cursor: "pointer" }} onClick={() => addTransactionToggle()}>Add Transaction</NavLink>
           </NavItem>
+          <div className="divider" />
           <NavItem >
             <NavLink style={{cursor: "pointer" }} onClick={() => transferToggle()}>Transfer Funds</NavLink>
           </NavItem>
+          <div className="divider" />
           <NavItem >
             <NavLink style={{cursor: "pointer" }} href="/envelopes">My Envelopes</NavLink>
           </NavItem>
+          <div className="divider" />
           <NavItem >
             <NavLink style={{cursor: "pointer" }} onClick={() => logout()}>Log out</NavLink>
           </NavItem>
+          <div className="divider" />
         </Nav>
       </Collapse>
     </Navbar>
