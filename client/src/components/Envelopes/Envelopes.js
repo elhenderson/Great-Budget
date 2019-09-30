@@ -8,32 +8,14 @@ import {Form, Field} from 'react-final-form';
 import {confirmAlert} from 'react-confirm-alert';
 import '../../../node_modules/react-confirm-alert/src/react-confirm-alert.css'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faTrash, faEnvelope} from '@fortawesome/free-solid-svg-icons' 
-import './Envelopes.css'
+import {faTrash} from '@fortawesome/free-solid-svg-icons' 
+import './Envelopes.scss'
 import { toast } from 'react-toastify';
-
-
-// const modalStyles = {
-//   content : {
-//     transition: 'bottom 1s ease-out',
-//     transform: 'translate(-50%, -50%)',
-//     top: '50%',
-//     left: '50%',
-//     right: 'auto',
-//     bottom: 'auto'
-//   }
-// };
-
-// Modal.defaultStyles.background = 'gray';
-// Modal.defaultStyles.overlay.background = 'gray';
-
-
-
+import {Card, CardTitle, Button} from 'reactstrap';
 
 const renderField = ({
   input,
   label,
-  type,
   placeholder,
   meta: { touched, error, warning }
 }) => (
@@ -81,7 +63,7 @@ const Envelopes = props => {
     props.getUnallocated();
   }
 
-  const mergeEnvelopeChanges = (envelopeToChange, value) => {
+  const mergeEnvelopeChanges = (envelopeToChange) => {
     const updatedEnvelopesObj = {
       ...props.envelopes, 
       [envelopeToChange]: "0.00"
@@ -121,7 +103,7 @@ const Envelopes = props => {
       <Form onSubmit={value => {
         mergeEnvelopeChanges(envelopeName, value.envelopeValue)
       }} >
-        {({handleSubmit, pristine, form, submitting}) => (
+        {({handleSubmit, pristine, submitting}) => (
           <form onSubmit={handleSubmit}>
             <div>
               <Field 
@@ -153,7 +135,7 @@ const Envelopes = props => {
       <Form onSubmit={values => {
         mergeEnvelopeChanges(values.envelopeName)
       }} >
-        {({handleSubmit, pristine, form, submitting}) => (
+        {({handleSubmit, pristine, submitting}) => (
           <form onSubmit={handleSubmit}>
             <div>
               <Field 
@@ -184,13 +166,18 @@ const Envelopes = props => {
 
   const renderEnvelopes = () => {
       let envelopesArray = Object.entries(props.envelopes);
-      const renderedEnvelopes = envelopesArray.map((envelopeInfo, index) => (
-        <div key={uuidv4()} style={{display: "flex", justifyContent: "center", margin: "auto"}}>
-          <p style={{marginRight: "15px"}} >{envelopeInfo[0]} : {envelopeInfo[1]}</p>
+      const renderedEnvelopes = envelopesArray.map((envelopeInfo) => (
+        <Card key={uuidv4()} style={{display: "flex", margin: "auto", border: '2px  #668925 solid', flexDirection: 'row'}}>
+          <CardTitle>
+            <p >{envelopeInfo[0]}</p>
+            <p style={{float: 'right'}} >{envelopeInfo[1]}</p>
+          </CardTitle>
           {/* <button onClick={() => openModal(envelopeInfo[0], envelopeInfo[1])}>Edit</button> */}
-          <FontAwesomeIcon style={{cursor: "pointer"}} icon={faTrash} onClick={() => onDeleteEnvelope(envelopeInfo[0])} />
+          <Button onClick={() => onDeleteEnvelope(envelopeInfo[0])}>
+            <FontAwesomeIcon style={{cursor: "pointer"}} icon={faTrash}  />
+          </Button>
 
-        </div>
+        </Card>
       ))
 
     return renderedEnvelopes;
@@ -201,11 +188,17 @@ const Envelopes = props => {
     <div>
       <h1>My Envelopes</h1>
       <hr />
-      {props.unallocated ? <h5>Unallocated: {props.unallocated}</h5> : null}
-      <br/>
-      {renderEnvelopes()}
-      {renderModal()}
-      <FontAwesomeIcon size="6x" icon={faEnvelope} style={{cursor: "pointer"}} onClick={() => openModal()} />
+          {props.unallocated ? <h5>Unallocated: {props.unallocated}</h5> : null}
+          <br/>
+          {renderEnvelopes()}
+          {renderModal()}
+          <div>
+            <Button onClick={() => openModal()} className="addEnvelope">
+              Add Envelope
+            </Button>
+          </div>
+
+          {/* <FontAwesomeIcon size="6x" icon={faEnvelope} style={{cursor: "pointer"}} onClick={() => openModal()} >Add Envelope</FontAwesomeIcon> */}
     </div>
   )
 }

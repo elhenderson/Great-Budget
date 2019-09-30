@@ -1,8 +1,8 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {Form, Field} from 'react-final-form';
 // import {Form, FormGroup, Button} from 'reactstrap';
 import {required, email as emailValidator, password as passwordValidator, composeValidators} from '../../utils/formValidators'
-import styles from './Login.module.css';
+import './Login.scss';
 import {connect} from 'react-redux';
 import * as userActions from '../../store/actions/user';
 import {withRouter} from 'react-router-dom';
@@ -58,7 +58,7 @@ const LoginForm = props => {
 
 
   return (
-    <div className={styles.form}>
+    <div className="loginForm">
       {redirectNotice()}
       <h3>Great Budget</h3>
       <h2>Login</h2>

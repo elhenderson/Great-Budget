@@ -1,3 +1,31 @@
+button.btn.btn-secondary {
+  height: 69px;
+  width: 55px;
+  right: 0px;
+  position: absolute;
+  background: red;
+  border-radius: 3px;
+}
+
+.card {
+  align-items: center;
+  color: white;
+  background: #15101A;
+  height: 73px;
+  width: 300px;
+  border-radius: 5px;
+  p {
+    margin-left: 10px;
+    margin-top: 10px;
+    margin-bottom: 0px;
+  }
+}
+
+.card-title {
+  display: flex;
+  align-content: space-between;
+}
+
 .ReactModal__Overlay {
   
   transition: background-color 500ms ease-in-out;
@@ -39,4 +67,81 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+.react-confirm-alert-body {
+  background: linear-gradient(235deg, #93066C 0%, #C5504F 39%, #C55008 89%);
+  color: black;
+  font-family: 'Lobster', cursive;
+}
+
+.react-confirm-alert-overlay {
+  background: rgba(255,255,255, 0.3);
+}
+
+@keyframes slide {
+	0% {transform:translateX(-100%);}
+  50% {transform:translateX(100%);}
+  100% {transform: translateX(-100%);}
+}
+
+.addEnvelope {
+  background: linear-gradient(235deg, #93066C 0%, #C5504F 39%, #C55008 89%) !important;   
+  width: 120px !important;
+  position: unset !important;
+  border-radius: 3px;
+  // animation: slide 2s infinite;
+  background: #333;
+  color: #ccc;
+  width: 200px;
+  height: 60px;
+  border: 0;
+  font-size: 18px;
+  border-radius: 4px;
+  font-family: 'Raleway', sans-serif;
+  transition: .6s;
+  overflow: hidden;
+  // &:focus{
+  //   outline: 0;
+  // }
+  // &:before{
+  //   content: '';
+  //   // display: block;
+  //   position: absolute;
+  //   background: rgba(255,255,255,0.5);
+  //   // width: 100px;
+  //   // height: 100%;
+  //   // left: 0;
+  //   // top: 0;
+  //   opacity: .5;
+  //   filter: blur(30px);
+  //   transform: translateX(-100px) ;
+  // }
+  // &:after{
+  //   content: '';
+  //   // display: block;
+  //   position: absolute;
+  //   background: rgba(255,255,255,0.2);
+  //   width: 100px;
+  //   height: 10%;
+  //   // left: 30px;
+  //   // top: 0;
+  //   opacity: 0;
+  //   filter: blur(5px);
+  //   transform: translateX(-100px);
+  // }
+  // &:hover{
+  //   // background: #338033;
+  //   cursor: pointer;
+  //   &:before{
+  //     transform: translateX(100px) ;  
+  //     opacity: 0.6;
+  //     transition: .7s;
+  //   }
+  //   &:after{
+  //     transform: translateX(100px);  
+  //     opacity: 1;
+  //     transition: .7s;
+  //   }
+  // }
 }

@@ -1,7 +1,6 @@
 import React from 'react';
-import { BrowserRouter, Route, Link, Redirect, withRouter } from 'react-router-dom';
+import { Route, Redirect } from 'react-router-dom';
 import Cookies from 'universal-cookie'
-import {toast} from 'react-toastify'
 
 const cookies = new Cookies();
 

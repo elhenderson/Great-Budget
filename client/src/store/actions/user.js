@@ -2,7 +2,6 @@ import axios from 'axios';
 import {GET_USER, ADD_USER} from './actionTypes';
 import {toast} from 'react-toastify';
 import Cookies from 'universal-cookie';
-import Envelopes from '../../components/Envelopes/Envelopes'
 
 const cookies = new Cookies();
 

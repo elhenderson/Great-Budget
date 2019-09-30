@@ -1,5 +1,17 @@
 .App {
   text-align: center;
+  height: 100%;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  background: linear-gradient(135deg, rgba(0,255,0,1) 0%, #31a807 39%, rgba(133,187,101,1) 89%);
+  background-size: 100%;
+  font-family: 'Lobster', cursive;
 }
 
 .App-logo {
@@ -68,6 +80,7 @@
   transform: translateY(30px);
   opacity: 0;
   width: 100%;
+  max-width: 767px;
   // height: 100%;
   margin-top: 50px !important;
 
@@ -88,7 +101,7 @@
     // align-content: center;
     align-items: center;
     // z-index: 3;
-    background: rgba(0,0,0,1);
+    background: linear-gradient(235deg, #93066C 0%, #C5504F 39%, #C55008 89%);
     opacity: 1;
     transform: translateY(0);
 
@@ -105,5 +118,31 @@
     opacity: 0;
     transform: translateY(30px);
   }
+}
+
+.Toastify__toast-body {
+  font-family: 'Lobster', cursive;
+  color: black;
+}
+
+.Toastify__toast {
+  border: 1px black solid;
+  // border-radius: 5px;
+}
+
+.Toastify__toast.Toastify__toast--success {
+  border-radius: 5px;
+}
+
+.Toastify__toast.Toastify__toast--warn {
+  border-radius: 5px;
+}
+
+.Toastify__toast.Toastify__toast--error {
+  border-radius: 5px;
+}
+
+.Toastify__toast.Toastify__toast--info {
+  border-radius: 5px;
 }
 

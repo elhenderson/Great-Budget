@@ -10,6 +10,15 @@
 }
 
 
+.loginForm {
+  border: black solid 5px;
+  border-radius: 20px;
+  margin: 50px auto;
+  background: linear-gradient(235deg, #C55008 0%, #C5504F 39%, #93066C 89%);
+  font-family: 'Lobster', cursive;
+  max-width: 767px;
+}
+
 form button {
   border-radius: 5px;
   margin-right: 20px;

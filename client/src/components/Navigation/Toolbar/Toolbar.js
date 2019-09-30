@@ -11,9 +11,8 @@ import {
   NavItem,
   NavLink} from 'reactstrap';
 import Cookies from 'universal-cookie';
-import {Redirect} from 'react-router-dom';
-import Login from '../../Login/Login';
 import {withRouter} from 'react-router-dom';
+import './Toolbar.scss'
 
 const Toolbar = (props) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -50,30 +49,29 @@ const Toolbar = (props) => {
     // </div>
 
     <div>
-    <Navbar color="faded" light>
+    <Navbar light expand="md">
       <NavbarBrand className="mr-auto">GreatBudget</NavbarBrand>
       <NavbarToggler onClick={toggle} className="mr-2" />
       <Collapse isOpen={isOpen} navbar>
         <Nav navbar>
           <NavItem>
-            <NavLink href="/income" style={{float: "left"}}>Add Income</NavLink>
+            <NavLink href="/income" style={{}}>Add Income</NavLink>
           </NavItem>
           <NavItem>
-            <NavLink style={{cursor: "pointer", float: "left"}} onClick={() => addTransactionToggle()}>Add Transaction</NavLink>
+            <NavLink style={{cursor: "pointer" }} onClick={() => addTransactionToggle()}>Add Transaction</NavLink>
           </NavItem>
           <NavItem >
-            <NavLink style={{cursor: "pointer", float: "left"}} onClick={() => transferToggle()}>Transfer Funds</NavLink>
+            <NavLink style={{cursor: "pointer" }} onClick={() => transferToggle()}>Transfer Funds</NavLink>
           </NavItem>
           <NavItem >
-            <NavLink style={{cursor: "pointer", float: "left"}} href="/envelopes">My Envelopes</NavLink>
+            <NavLink style={{cursor: "pointer" }} href="/envelopes">My Envelopes</NavLink>
           </NavItem>
           <NavItem >
-            <NavLink style={{cursor: "pointer", float: "left"}} onClick={() => logout()}>Log out</NavLink>
+            <NavLink style={{cursor: "pointer" }} onClick={() => logout()}>Log out</NavLink>
           </NavItem>
         </Nav>
       </Collapse>
     </Navbar>
-    <hr style={{background: "white"}} />
     <Transactions />
   </div>
   )

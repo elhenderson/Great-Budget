@@ -1,10 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {connect} from 'react-redux';
 import {Form, Field} from 'react-final-form';
-import {required, composeValidators, currency } from '../utils/formValidators';
-import * as envelopeActions from '../store/actions/evelope';
+import {required, composeValidators, currency } from '../../utils/formValidators';
+import * as envelopeActions from '../../store/actions/evelope';
 import Modal from 'react-modal'
 import {toast} from 'react-toastify';
+import './Income.scss'
 
 // Modal.defaultStyles.overlay.color = 'gray';
 // Modal.defaultStyles.overlay.background = 'gray';
@@ -134,7 +135,7 @@ const Income = props => {
   // }
 
   return (
-    <div>
+    <div className="incomeForm">
       <h2>Add Income Source</h2>
       <hr />
       <Form 

@@ -162,10 +162,6 @@ const Transactions = (props) => {
     props.getEnvelopes();
   }, [])
 
-  function initialEnvelopes() {
-    props.getEnvelopes();
-
-  }
 
   const mergeEnvelopeChanges = (amountToSubtract) => {
     if (!selected) toast.warn("Please specify an envelope")

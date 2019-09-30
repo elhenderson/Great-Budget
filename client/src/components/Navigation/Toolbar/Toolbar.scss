@@ -1,0 +1,44 @@
+// .collapse.navbar-collapse {
+//   color: white;
+//   text-shadow: -.75px -.75px 0 #000, .75px -.75px 0 #000, -.75px .75px 0 #000, .75px .75px 0 #000;
+// }
+
+// a.nav-link {
+//   color: white;
+//   text-shadow: -.75px -.75px 0 #000, .75px -.75px 0 #000, -.75px .75px 0 #000, .75px .75px 0 #000;
+// }
+
+.Toolbar nav {
+  height: 100%;
+}
+
+.Logo {
+  height: 80%;
+}
+
+@media (max-width: 499px) {
+  .DesktopOnly {
+    display: none;
+  }
+}
+
+@media (max-width: 767px) {
+  a.nav-link {
+    float: left;
+    margin-left: -15px;
+  }
+}
+
+a.nav-link {
+  color: black;
+  
+
+}
+
+.collapse.navbar-collapse {
+  margin-left: 15px;
+}
+
+.navbar-light .navbar-nav .nav-link {
+  color: rgba(0,0,0,1);
+}

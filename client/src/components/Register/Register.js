@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Form, Field} from 'react-final-form';
 import {required, email as emailValidator, password as passwordValidator, confirmPassword as confirmPasswordValidator, composeValidators} from '../../utils/formValidators'
-import styles from './Register.module.css';
+import './Register.scss';
 import {connect} from 'react-redux';
 import * as userActions from '../../store/actions/user';
 import {toast} from 'react-toastify';
@@ -38,7 +38,7 @@ const RegisterForm = props => {
   }
 
   return (
-    <div className={styles.form}>
+    <div className="registerForm" >
       <h2>Register</h2>
       <hr />
       <Form  onSubmit={values => {

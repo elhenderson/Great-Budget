@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 
 const History = props => {
 
-  return "test"
+  return <></>
 }
 
 const mapStateToProps = state => ({

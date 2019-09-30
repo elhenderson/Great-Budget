@@ -8,10 +8,10 @@ import Envelopes from './components/Envelopes/Envelopes';
 import Register from './components/Register/Register';
 import Login from './components/Login/Login';
 import Transactions from './components/Transactions/Transactions';
-import Income from './components/Income';
+import Income from './components/Income/Income';
 import {ToastContainer} from 'react-toastify'
 import '../node_modules/react-toastify/dist/ReactToastify.min.css'
-import '../node_modules/bootswatch/dist/darkly/bootstrap.min.css'
+// import '../node_modules/bootswatch/dist/minty/bootstrap.min.css'
 import ProtectedRoute from './hoc/ProtectedRoute/ProtectedRoute'
 import '../node_modules/font-awesome/css/font-awesome.min.css';
 import History from './components/History/History'
