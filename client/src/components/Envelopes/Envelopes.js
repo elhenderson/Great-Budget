@@ -12,6 +12,7 @@ import {faTrash} from '@fortawesome/free-solid-svg-icons'
 import './Envelopes.scss'
 import { toast } from 'react-toastify';
 import {Card, CardTitle, Button} from 'reactstrap';
+import LoadingComponent from '../UI/LoadingComponent/LoadingComponent';
 
 const renderField = ({
   input,
@@ -188,7 +189,7 @@ const Envelopes = props => {
     <div>
       <h1>My Envelopes</h1>
       <hr />
-          {props.unallocated ? <h5>Unallocated: {props.unallocated}</h5> : null}
+          {props.unallocated ? <h5>Unallocated: {props.unallocated}</h5> :       <LoadingComponent />}
           <br/>
           {renderEnvelopes()}
           {renderModal()}
