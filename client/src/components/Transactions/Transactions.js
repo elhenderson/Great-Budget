@@ -11,17 +11,6 @@ import './Transactions.scss';
 
 Modal.defaultStyles = {};
 
-// const modalStyles = {
-//   content : {
-//     transition: 'bottom 1s ease-out',
-//     transform: 'translate(-50%, -50%)',
-//     top: '50%',
-//     left: '50%',
-//     right: 'auto',
-//     bottom: 'auto',
-//     animation: 'fadein 2s'
-//   }
-// };
 
 const selectStyle = {
   option: (provided, state) => ({
@@ -57,14 +46,25 @@ const renderField = ({
 
 
 
-const Transactions = (props) => {
+const Transactions = ({
+  envelopes,
+  unallocated,
+  isTransacting,
+  isTransfering,
+  getEnvelopes,
+  getUnallocated,
+  editEnvelopes,
+  editUnallocated,
+  transfering,
+  transacting
+}) => {
   const [envelopeValue, setEnvelopeValue] = useState();
   const [selected, setSelected] = useState();
   const [selectedEnvToAdd, setSelectedEnvToAdd] = useState();
   const [selectedEnvToSubtract, setSelectedEnvToSubtract] = useState();
   const [isUnallocated, setIsUnallocated] = useState();
 
-  const envelopeNames = Object.keys(props.envelopes).map(envelopeName => (
+  const envelopeNames = Object.keys(envelopes).map(envelopeName => (
     {value: envelopeName, label: envelopeName}
   ))
 
@@ -159,24 +159,24 @@ const Transactions = (props) => {
   }
 
   useEffect(() => {
-    props.getEnvelopes();
-  }, [])
+    getEnvelopes();
+  }, [getEnvelopes])
 
 
   const mergeEnvelopeChanges = (amountToSubtract) => {
     if (!selected) toast.warn("Please specify an envelope")
     else {
 
-      const currentEnvelopeValue = props.envelopes[selected]
+      const currentEnvelopeValue = envelopes[selected]
 
       const newEnvelopeValue = currentEnvelopeValue - amountToSubtract.value
 
-      const newUnallocatedValue = isUnallocated ? +props.unallocated - +amountToSubtract.value : +props.unallocated
+      const newUnallocatedValue = isUnallocated ? +unallocated - +amountToSubtract.value : +unallocated
 
       const updatedEnvelopesObj = isUnallocated ? {
-        ...props.envelopes
+        ...envelopes
       } : {
-        ...props.envelopes,
+        ...envelopes,
         [selected] : newEnvelopeValue.toFixed(2)
       }
 
@@ -184,11 +184,11 @@ const Transactions = (props) => {
 
       if (newEnvelopeValue < 0) toast.error("Insufficient funds")
       else {
-        isUnallocated ? props.editUnallocated(newUnallocatedValue) : props.editEnvelopes(updatedEnvelopesObj);
+        isUnallocated ? editUnallocated(newUnallocatedValue) : editEnvelopes(updatedEnvelopesObj);
         toast.success("Transaction received!");
-        props.isTransacting(false);
+        isTransacting(false);
         setSelected("")
-        isUnallocated ? props.getUnallocated() : props.getEnvelopes();
+        isUnallocated ? getUnallocated() : getEnvelopes();
         setIsUnallocated(false);
       }
     }
@@ -202,42 +202,42 @@ const Transactions = (props) => {
       return
     } 
 
-    const envToSubtract = props.envelopes[selectedEnvToSubtract] || props.unallocated
-    const envToAdd = props.envelopes[selectedEnvToAdd]
+    const envToSubtract = envelopes[selectedEnvToSubtract] || unallocated
+    const envToAdd = envelopes[selectedEnvToAdd]
 
     const newFromEnvValue = +envToSubtract - +amountToTransfer.value
     const newToEnvValue = +envToAdd + +amountToTransfer.value
-    const newUnallocatedValue = isUnallocated ? +props.unallocated - +amountToTransfer.value : +props.unallocated 
+    const newUnallocatedValue = isUnallocated ? +unallocated - +amountToTransfer.value : +unallocated 
 
     const updatedEnvelopesObj = isUnallocated ? {
-      ...props.envelopes,
+      ...envelopes,
       [selectedEnvToAdd]: newToEnvValue.toFixed(2)
     } : {
-      ...props.envelopes,
+      ...envelopes,
       [selectedEnvToSubtract]: newFromEnvValue.toFixed(2),
       [selectedEnvToAdd]: newToEnvValue.toFixed(2)
     }
 
     if (newFromEnvValue < 0) toast.error("Insufficient funds")
     else {
-      props.editEnvelopes(updatedEnvelopesObj);
-      props.editUnallocated(newUnallocatedValue.toFixed(2))
+      editEnvelopes(updatedEnvelopesObj);
+      editUnallocated(newUnallocatedValue.toFixed(2))
       toast.success("Transfer successful!");
-      props.isTransfering(false);
+      isTransfering(false);
       setSelectedEnvToSubtract("");
       setSelectedEnvToAdd("");
-      props.getEnvelopes();
-      props.getUnallocated();
+      getEnvelopes();
+      getUnallocated();
       setIsUnallocated(false)
     } 
   }
 
   const renderTransactions = () => {
-      if (props.transacting)  return (
+      if (transacting)  return (
         <Modal
-          onRequestClose={() => props.isTransacting(false)}
+          onRequestClose={() => isTransacting(false)}
           ariaHideApp={false}
-          isOpen={props.transacting}
+          isOpen={transacting}
           
           contentLabel="Add Transaction"
         >
@@ -254,7 +254,7 @@ const Transactions = (props) => {
                   <Field 
                     component={renderSelect}
                   />
-                  <p>{isUnallocated ? props.unallocated :  props.envelopes[selected]}</p>
+                  <p>{isUnallocated ? unallocated :  envelopes[selected]}</p>
                   <h4>Amount</h4>
                   <div className="titleSpacing">
                     <Field
@@ -270,7 +270,7 @@ const Transactions = (props) => {
                   <button type="submit" disabled={submitting || pristine || !selected}>
                     Submit
                   </button>
-                  <button type="button" onClick={() => props.isTransacting(false)}>
+                  <button type="button" onClick={() => isTransacting(false)}>
                     Cancel
                   </button>
                 </div>
@@ -279,11 +279,11 @@ const Transactions = (props) => {
           </Form>
         </Modal>
       ) 
-      else if (props.transfering) return (
+      else if (transfering) return (
         <Modal
-          onRequestClose={() => props.isTransfering(false)}
+          onRequestClose={() => isTransfering(false)}
           ariaHideApp={false}
-          isOpen={props.transfering}
+          isOpen={transfering}
           
           contentLabel="Transfer Funds"
         >
@@ -300,12 +300,12 @@ const Transactions = (props) => {
                   <Field 
                     component={envToSubtractSelect}
                   />
-                  <p>{isUnallocated ? props.unallocated :  props.envelopes[selectedEnvToSubtract]}</p>
+                  <p>{isUnallocated ? unallocated :  envelopes[selectedEnvToSubtract]}</p>
                   <h3>To</h3>
                   <Field
                     component={envToAddSelect}
                   />
-                  <p>{props.envelopes[selectedEnvToAdd]}</p>
+                  <p>{envelopes[selectedEnvToAdd]}</p>
                   <Field
                     label={<h3>Amount</h3>}
                     component={renderField}
@@ -317,7 +317,7 @@ const Transactions = (props) => {
                   <button type="submit" disabled={submitting || pristine || !selectedEnvToAdd || !selectedEnvToSubtract}>
                     Submit
                   </button>
-                  <button type="button" onClick={() => props.isTransfering(false)}>
+                  <button type="button" onClick={() => isTransfering(false)}>
                     Cancel
                   </button>
                 </div>

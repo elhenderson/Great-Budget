@@ -31,16 +31,25 @@ const renderField = ({
   </div>
 )
 
-const Envelopes = props => {
+const Envelopes = ({
+  getEnvelopes, 
+  getUnallocated,
+  editEnvelopes,
+  deleteEnvelope,
+  addEnvelope,
+  envelopes,
+  unallocated
+}) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [envelopeValue, setEnvelopeValue] = useState();
   const [envelopeName, setEnvelopeName] = useState();
   const [initialEnvelopeValue, setInitialEnvelopeValue] = useState();
 
   useEffect(() => {
-    initialEnvelopes();
+    getEnvelopes();
+    getUnallocated();
     loginNotification();
-  }, [])
+  }, [getEnvelopes, getUnallocated])
 
   const loginNotification = () => {
     const prevPage = document.referrer
@@ -59,30 +68,33 @@ const Envelopes = props => {
     setModalIsOpen(false);
   }
 
-  function initialEnvelopes() {
-    props.getEnvelopes();
-    props.getUnallocated();
-  }
-
   const mergeEnvelopeChanges = (envelopeToChange) => {
+    if (envelopes[envelopeToChange]) {
+      toast.error("Unable to add duplicate envelopes");
+      return
+    }
+
     const updatedEnvelopesObj = {
-      ...props.envelopes, 
+      ...envelopes, 
       [envelopeToChange]: "0.00"
     }
 
-    props.editEnvelopes(updatedEnvelopesObj);
-    window.location.reload();
+    editEnvelopes(updatedEnvelopesObj);
+    getEnvelopes();
+    closeModal();
+    toast.success("Envelope added!")
+    // window.location.reload();
   }
 
   const onDeleteEnvelope = (envelopeToDelete) => {
-    const updatedEnvelopesObj = props.envelopes
+    const updatedEnvelopesObj = envelopes
     confirmAlert({
       title: "Delete Envelope",
       message: "Are you sure you want to delete this envelope?",
       buttons: [
         {
           label: 'Yes',
-          onClick: () => props.deleteEnvelope(updatedEnvelopesObj, envelopeToDelete)
+          onClick: () => deleteEnvelope(updatedEnvelopesObj, envelopeToDelete)
         },
         {
           label: 'No'
@@ -114,7 +126,7 @@ const Envelopes = props => {
                 onChange={e => setEnvelopeValue(e.target.value)}
                 placeholder={initialEnvelopeValue}
               />
-              <button type="submit" disabled={submitting, pristine}>
+              <button type="submit" disabled={submitting | pristine}>
                 Submit
               </button>
               <button type="button" onClick={closeModal}>
@@ -152,7 +164,7 @@ const Envelopes = props => {
                 onChange={e => setEnvelopeValue(e.target.value)}
                 placeholder={initialEnvelopeValue}
               /> */}
-              <button type="submit" disabled={submitting, pristine}>
+              <button type="submit" disabled={submitting | pristine}>
                 Submit
               </button>
               <button type="button" onClick={closeModal}>
@@ -166,7 +178,7 @@ const Envelopes = props => {
   }
 
   const renderEnvelopes = () => {
-      let envelopesArray = Object.entries(props.envelopes);
+      let envelopesArray = Object.entries(envelopes);
       const renderedEnvelopes = envelopesArray.map((envelopeInfo) => (
         <Card key={uuidv4()} style={{display: "flex", margin: "auto", border: '2px  #668925 solid', flexDirection: 'row'}}>
           <CardTitle>
@@ -189,7 +201,7 @@ const Envelopes = props => {
     <div>
       <h1>My Envelopes</h1>
       <hr />
-          {props.unallocated ? <h5>Unallocated: {props.unallocated}</h5> :       <LoadingComponent />}
+          {unallocated ? <h5>Unallocated: {unallocated}</h5> :       <LoadingComponent />}
           <br/>
           {renderEnvelopes()}
           {renderModal()}
@@ -212,7 +224,7 @@ const mapStateToProps = state => ({
  
 
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps= dispatch => ({
   getEnvelopes:() => dispatch(envelopeActions.getEnvelopes()),
   getUnallocated: () => dispatch(envelopeActions.getUnallocated()),
   editEnvelopes:(envelopes) => dispatch(envelopeActions.editEnvelopes(envelopes)),

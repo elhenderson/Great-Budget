@@ -42,7 +42,14 @@ const renderField = ({
 let incomeOverageMessage = ""
 
 
-const Income = props => {
+const Income = ({
+  envelopes,
+  unallocated,
+  getEnvelopes,
+  getUnallocated,
+  editEnvelopes,
+  editUnallocated
+}) => {
   // const [incomeSource, setIncomeSource] = useState();
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [incomeAmount, setIncomeAmount] = useState("0.00");
@@ -50,12 +57,12 @@ const Income = props => {
 
   useEffect(() => {
     // initialEnvelopes();
-    props.getEnvelopes();
-    props.getUnallocated();
-    // setEnvelopesObj(props.envelopes)
-  }, [])
+    getEnvelopes();
+    getUnallocated();
+    // setEnvelopesObj(envelopes)
+  }, [getEnvelopes, getUnallocated])
   // function initialEnvelopes() {
-  //   props.getEnvelopes();
+  //   getEnvelopes();
   // }
 
   const assignIncomeAmount = (income) => {
@@ -72,33 +79,33 @@ const Income = props => {
     setModalIsOpen(false);
   }
 
-  const incomeOverageValidator = (envelopes) => {
-    let unallocated = +incomeAmount + +props.unallocated;
+  const incomeOverageValidator = (values) => {
+    let updatedUnallocated = +incomeAmount + +unallocated;
     let envelopesTotal = 0;
-    let envelopesCopy = {...envelopes}
+    let envelopesCopy = {...values}
 
     for (let envelopeName in envelopesCopy) {
-      unallocated -= parseInt(envelopesCopy[envelopeName])
+      updatedUnallocated -= parseInt(envelopesCopy[envelopeName])
       envelopesTotal += parseFloat(envelopesCopy[envelopeName])
       
       envelopesCopy[envelopeName] = parseFloat(envelopesCopy[envelopeName])
-      envelopesCopy[envelopeName] = +envelopesCopy[envelopeName] + +props.envelopes[envelopeName]
+      envelopesCopy[envelopeName] = +envelopesCopy[envelopeName] + +envelopes[envelopeName]
       envelopesCopy[envelopeName] = envelopesCopy[envelopeName].toFixed(2)
 
     }
 
     if (+envelopesTotal <= +incomeAmount) {
       const updatedEnvelopesObj = {
-        ...props.envelopes,
+        ...envelopes,
         ...envelopesCopy
 
       }
-      props.editEnvelopes(updatedEnvelopesObj);
-      props.editUnallocated(unallocated.toFixed(2))
+      editEnvelopes(updatedEnvelopesObj);
+      editUnallocated(updatedUnallocated.toFixed(2))
       setModalIsOpen(false);
       toast.success("Income added!")
-      props.getEnvelopes();
-      props.getUnallocated();
+      getEnvelopes();
+      getUnallocated();
     } else {
       toast.error('Error: Envelope total exceeds income amount!', {
         position: "top-right",
@@ -112,10 +119,10 @@ const Income = props => {
   }
   
 
-  const envelopes = () => {
+  const retrieveEnvelopes = () => {
     
-    let envelopesArray = Object.entries(props.envelopes);
-    const envelopes = envelopesArray.map((envelopeInfo, index) => (
+    let envelopesArray = Object.entries(envelopes);
+    const renderEnvelopes = envelopesArray.map((envelopeInfo, index) => (
         <div key={envelopeInfo[0]}>
           <Field 
             name={envelopeInfo[0]}
@@ -127,7 +134,7 @@ const Income = props => {
         </div>
     ))
 
-    return envelopes;
+    return renderEnvelopes;
   }
 
   // const displayIncomeAmount = (amount) => {
@@ -164,7 +171,7 @@ const Income = props => {
                 component={renderField}
                 label="Amount"
               />
-              <button type="submit"  disabled={submitting, pristine}>
+              <button type="submit"  disabled={submitting | pristine}>
                 Submit
               </button>
             </div>
@@ -187,13 +194,12 @@ const Income = props => {
         </p>
         <Form 
         onSubmit={(values) => {
-          console.log(values)
           incomeOverageValidator(values) 
         }}>
           {({handleSubmit, pristine, submitting, form}) => (
             <form onSubmit={handleSubmit}>
               <div>
-                {envelopes()}
+                {retrieveEnvelopes()}
                 <button type="submit" disabled={submitting} >Submit</button>
               </div>
             </form>
