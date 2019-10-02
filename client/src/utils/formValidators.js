@@ -5,7 +5,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faExclamationCircle} from '@fortawesome/free-solid-svg-icons';
 
 
-export const required = value => (value || typeof value === 'number' ? undefined : <p  style={{color: 'rgb(255,160,0)'}} ><FontAwesomeIcon key={uuidv4()} style={{color: 'rgb(255,160,0)', marginRight: '5px'}} icon={faExclamationCircle} />This field is requirgb(255,160,0)</p>)
+export const required = value => (value || typeof value === 'number' ? undefined : <p  style={{color: 'rgb(255,160,0)'}} ><FontAwesomeIcon key={uuidv4()} style={{color: 'rgb(255,160,0)', marginRight: '5px'}} icon={faExclamationCircle} />This field is required</p>)
 
 export const email = value => 
   value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)
