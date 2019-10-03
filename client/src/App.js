@@ -14,9 +14,10 @@ import '../node_modules/react-toastify/dist/ReactToastify.min.css'
 // import '../node_modules/bootswatch/dist/minty/bootstrap.min.css'
 import ProtectedRoute from './hoc/ProtectedRoute/ProtectedRoute'
 import '../node_modules/font-awesome/css/font-awesome.min.css';
-import History from './components/History/History'
+import History from './components/History/History';
+import Modal from 'react-modal';
 
-
+Modal.defaultStyles = {};
 
 class App extends Component {
   render() {

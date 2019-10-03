@@ -1,49 +1,28 @@
 import React, {useEffect, useState} from 'react';
-import Modal from 'react-modal'
 import {connect} from 'react-redux';
-// import Modal from '../components/UI/Modal/Modal';
 import * as envelopeActions from '../../store/actions/evelope';
 import uuidv4 from 'uuid';
-import {Form, Field} from 'react-final-form';
 import {confirmAlert} from 'react-confirm-alert';
 import '../../../node_modules/react-confirm-alert/src/react-confirm-alert.css'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faTrash} from '@fortawesome/free-solid-svg-icons' 
 import './Envelopes.scss'
 import { toast } from 'react-toastify';
-import {Card, CardTitle, Button} from 'reactstrap';
+import {Button, Container, Row, Col} from 'reactstrap';
 import LoadingComponent from '../UI/LoadingComponent/LoadingComponent';
+import AddEnvModal from './AddEnvModal';
 
-const renderField = ({
-  input,
-  label,
-  placeholder,
-  meta: { touched, error, warning }
-}) => (
-  <div>
-    <label>{label}</label>
-    <div>
-      <input {...input} placeholder={placeholder}  />
-      {touched &&
-        ((error && <span >{error}</span>) ||
-          (warning && <span>{warning}</span>))}
-    </div>
-  </div>
-)
 
 const Envelopes = ({
   getEnvelopes, 
   getUnallocated,
   editEnvelopes,
   deleteEnvelope,
-  addEnvelope,
   envelopes,
   unallocated
 }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [envelopeValue, setEnvelopeValue] = useState();
   const [envelopeName, setEnvelopeName] = useState();
-  const [initialEnvelopeValue, setInitialEnvelopeValue] = useState();
 
   useEffect(() => {
     getEnvelopes();
@@ -58,9 +37,7 @@ const Envelopes = ({
     }
   }
 
-  const openModal = (envelopeNameToSet, initialEnvelopeValueToSet) => {
-    setEnvelopeName(envelopeNameToSet);
-    setInitialEnvelopeValue(initialEnvelopeValueToSet);
+  const openModal = () => {
     setModalIsOpen(true);
   }
 
@@ -105,92 +82,32 @@ const Envelopes = ({
 
   const renderModal = () => {
     return (
-    envelopeName ? 
-      <Modal
-      ariaHideApp={false}
-      isOpen={modalIsOpen}
-      onRequestClose={closeModal}
-      contentLabel="Edit Envelope"
-    >
-      <h2>{envelopeName}</h2>
-      <Form onSubmit={value => {
-        mergeEnvelopeChanges(envelopeName, value.envelopeValue)
-      }} >
-        {({handleSubmit, pristine, submitting}) => (
-          <form onSubmit={handleSubmit}>
-            <div>
-              <Field 
-                component={renderField}
-                name="envelopeValue"
-                value={envelopeValue}
-                onChange={e => setEnvelopeValue(e.target.value)}
-                placeholder={initialEnvelopeValue}
-              />
-              <button type="submit" disabled={submitting | pristine}>
-                Submit
-              </button>
-              <button type="button" onClick={closeModal}>
-                Cancel
-              </button>
-            </div>
-          </form>
-        )}
-      </Form>
-    </Modal>
-    :       
-    <Modal
-      ariaHideApp={false}
-      isOpen={modalIsOpen}
-      onRequestClose={closeModal}
-      contentLabel="Edit Envelope"
-    >
-      <h2>Add Envelope</h2>
-      <Form onSubmit={values => {
-        mergeEnvelopeChanges(values.envelopeName)
-      }} >
-        {({handleSubmit, pristine, submitting}) => (
-          <form onSubmit={handleSubmit}>
-            <div>
-              <Field 
-                component={renderField}
-                name="envelopeName"
-                value={envelopeName}
-                onChange = {e => setEnvelopeName(e.target.value)}
-              />
-              {/* <Field 
-                component={renderField}
-                name="envelopeValue"
-                value={envelopeValue}
-                onChange={e => setEnvelopeValue(e.target.value)}
-                placeholder={initialEnvelopeValue}
-              /> */}
-              <button type="submit" disabled={submitting | pristine}>
-                Submit
-              </button>
-              <button type="button" onClick={closeModal}>
-                Cancel
-              </button>
-            </div>
-          </form>
-        )}
-      </Form>
-    </Modal> )
+      <AddEnvModal 
+        modalIsOpen={modalIsOpen}
+        mergeEnvelopeChanges={mergeEnvelopeChanges}
+        closeModal={closeModal}
+        setEnvelopeName={setEnvelopeName}
+        envelopeName={envelopeName}
+      /> 
+    )
   }
 
   const renderEnvelopes = () => {
       let envelopesArray = Object.entries(envelopes);
       const renderedEnvelopes = envelopesArray.map((envelopeInfo) => (
-        <Card key={uuidv4()} style={{display: "flex", margin: "auto", border: '2px  #668925 solid', flexDirection: 'row'}}>
-          <CardTitle>
+        <Row key={uuidv4()} style={{display: "flex", margin: "auto", border: '2px  #668925 solid', flexDirection: 'row'}}>
+          <Col xs="6">
             <p >{envelopeInfo[0]}</p>
+          </Col>
+          <Col>
             <p style={{float: 'right'}} >{envelopeInfo[1]}</p>
-          </CardTitle>
-          {/* <button onClick={() => openModal(envelopeInfo[0], envelopeInfo[1])}>Edit</button> */}
-          <Button onClick={() => onDeleteEnvelope(envelopeInfo[0])}>
-            <FontAwesomeIcon style={{cursor: "pointer"}} icon={faTrash}  />
-          </Button>
-
-        </Card>
+          </Col>
+          <Col>
+            <Button onClick={() => onDeleteEnvelope(envelopeInfo[0])}>
+              <FontAwesomeIcon style={{cursor: "pointer"}} icon={faTrash}  />
+            </Button>
+          </Col>
+        </Row>
       ))
 
     return renderedEnvelopes;
@@ -203,15 +120,15 @@ const Envelopes = ({
       <hr />
           {unallocated ? <h5>Unallocated: {unallocated}</h5> :       <LoadingComponent />}
           <br/>
-          {renderEnvelopes()}
+          <Container >
+            {renderEnvelopes()}
+          </Container>
           {renderModal()}
           <div>
             <Button onClick={() => openModal()} className="addEnvelope">
               Add Envelope
             </Button>
           </div>
-
-          {/* <FontAwesomeIcon size="6x" icon={faEnvelope} style={{cursor: "pointer"}} onClick={() => openModal()} >Add Envelope</FontAwesomeIcon> */}
     </div>
   )
 }

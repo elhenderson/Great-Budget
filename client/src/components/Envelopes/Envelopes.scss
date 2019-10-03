@@ -5,12 +5,28 @@ button.btn.btn-secondary {
   position: absolute;
   background: red;
   border-radius: 3px;
+  top: -35px;
 }
 
 .card {
   align-items: center;
   color: white;
   background: #15101A;
+  height: 73px;
+  width: 300px;
+  border-radius: 5px;
+  p {
+    margin-left: 10px;
+    margin-top: 10px;
+    margin-bottom: 0px;
+  }
+}
+
+.row {
+  align-items: center;
+  color: white;
+  background-color: #000000;
+  background-image: linear-gradient(315deg, #000000 0%, #414141 74%);
   height: 73px;
   width: 300px;
   border-radius: 5px;

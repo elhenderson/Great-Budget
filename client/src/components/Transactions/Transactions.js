@@ -1,49 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import * as envelopeActions from '../../store/actions/evelope';
-import Modal from 'react-modal';
-import {Form, Field} from 'react-final-form';
 import {connect} from 'react-redux';
-import Select from 'react-select';
 import * as transactionActions from '../../store/actions/transaction';
 import {toast} from 'react-toastify';
-import {currency, required, composeValidators} from '../../utils/formValidators'
 import './Transactions.scss';
-
-Modal.defaultStyles = {};
-
-
-const selectStyle = {
-  option: (provided, state) => ({
-    ...provided,
-    color: 'black'
-  }),
-  singleValue: (provided, state) => {
-    return {...provided}
-  }
-}
-
-
-
-const renderField = ({
-  input,
-  label,
-  type,
-  placeholder,
-  meta: { touched, error, warning }
-}) => (
-  <div>
-    <label>{label}</label>
-    <div>
-      <input {...input} placeholder={placeholder}  />
-      {touched &&
-        ((error && <span >{error}</span>) ||
-          (warning && <span>{warning}</span>))}
-    </div>
-  </div>
-)
-
-
-
+import TransactionModal from './TransactionModal';
+import TransferModal from './TransferModal';
 
 
 const Transactions = ({
@@ -62,7 +24,7 @@ const Transactions = ({
   const [selected, setSelected] = useState();
   const [selectedEnvToAdd, setSelectedEnvToAdd] = useState();
   const [selectedEnvToSubtract, setSelectedEnvToSubtract] = useState();
-  const [isUnallocated, setIsUnallocated] = useState();
+  const [isUnallocated, setIsUnallocated] = useState(false);
 
   const envelopeNames = Object.keys(envelopes).map(envelopeName => (
     {value: envelopeName, label: envelopeName}
@@ -70,86 +32,13 @@ const Transactions = ({
 
   envelopeNames.unshift({value: "unallocated", label: "unallocated"});
 
-  const addEnvNames = envelopeNames.slice(1);
-
-  const renderSelect = ({
-    input,
-    label,
-    type,
-    placeholder,
-    meta: { touched, error, warning }
-  }) => (
-    <div className="titleSpacing">
-      <label>{label}</label>
-      <div >
-        <Select 
-          styles={selectStyle}
-          name="envelope"
-          value={{label: selected, value: selected}}
-          onChange={handleChange}
-          options={envelopeNames}
-        />
-        {touched &&
-          ((error && <span >{error}</span>) ||
-            (warning && <span>{warning}</span>))}
-      </div>
-    </div>
-  )
-
-  const envToAddSelect = ({
-    input,
-    label,
-    type,
-    placeholder,
-    meta: { touched, error, warning }
-  }) => (
-    <div className="titleSpacing">
-      <label>{label}</label>
-      <div>
-        <Select 
-          styles={selectStyle}
-          name="envelope"
-          value={{label: selectedEnvToAdd, value: selectedEnvToAdd}}
-          onChange={handleEnvToAdd}
-          options={addEnvNames}
-        />
-        {touched &&
-          ((error && <span >{error}</span>) ||
-            (warning && <span>{warning}</span>))}
-      </div>
-    </div>
-  )
-
-  const envToSubtractSelect = ({
-    input,
-    label,
-    type,
-    placeholder,
-    meta: { touched, error, warning }
-  }) => (
-    <div className="titleSpacing">
-      <label>{label}</label>
-      <div>
-        <Select 
-          styles={selectStyle}
-          name="envelope"
-          value={{label: selectedEnvToSubtract, value: selectedEnvToSubtract}}
-          onChange={handleEnvToSubtract}
-          options={envelopeNames}
-        />
-        {touched &&
-          ((error && <span >{error}</span>) ||
-            (warning && <span>{warning}</span>))}
-      </div>
-    </div>
-  )
-
   const handleChange = selectedOption => {
     selectedOption.value === "unallocated" ? setIsUnallocated(true) : setIsUnallocated(false)
     setSelected(selectedOption.value);
   }
 
   const handleEnvToAdd = selectedOption => {
+    selectedOption.value === "unallocated" ? setIsUnallocated(true) : setIsUnallocated(false)
     setSelectedEnvToAdd(selectedOption.value)
   }
 
@@ -233,100 +122,39 @@ const Transactions = ({
   }
 
   const renderTransactions = () => {
-      if (transacting)  return (
-        <Modal
-          onRequestClose={() => isTransacting(false)}
-          ariaHideApp={false}
-          isOpen={transacting}
-          
-          contentLabel="Add Transaction"
-        >
-          <h2>Add Transaction</h2>
-          <hr/>
-
-          <Form onSubmit={value => {
-            mergeEnvelopeChanges(value)
-          }} >
-            {({handleSubmit, pristine, submitting}) => (
-              <form onSubmit={handleSubmit}>
-                <div>
-                  <h4>Envelope Name</h4>
-                  <Field 
-                    component={renderSelect}
-                  />
-                  <p>{isUnallocated ? unallocated :  envelopes[selected]}</p>
-                  <h4>Amount</h4>
-                  <div className="titleSpacing">
-                    <Field
-                      
-                      component={renderField}
-                      name="value"
-                      value={envelopeValue}
-                      onChange={e => setEnvelopeValue(e.target.value)}
-                      validate={composeValidators(currency, required)}
-                    />
-                  </div>
-
-                  <button type="submit" disabled={submitting || pristine || !selected}>
-                    Submit
-                  </button>
-                  <button type="button" onClick={() => isTransacting(false)}>
-                    Cancel
-                  </button>
-                </div>
-              </form>
-            )}
-          </Form>
-        </Modal>
-      ) 
-      else if (transfering) return (
-        <Modal
-          onRequestClose={() => isTransfering(false)}
-          ariaHideApp={false}
-          isOpen={transfering}
-          
-          contentLabel="Transfer Funds"
-        >
-          <h2>Transfer Funds</h2>
-          <hr/>
-
-          <Form onSubmit={value => {
-            transferFundsChanges(value)
-          }} >
-            {({handleSubmit, pristine, submitting}) => (
-              <form onSubmit={handleSubmit}>
-                <div>
-                  <h3>From</h3>
-                  <Field 
-                    component={envToSubtractSelect}
-                  />
-                  <p>{isUnallocated ? unallocated :  envelopes[selectedEnvToSubtract]}</p>
-                  <h3>To</h3>
-                  <Field
-                    component={envToAddSelect}
-                  />
-                  <p>{envelopes[selectedEnvToAdd]}</p>
-                  <Field
-                    label={<h3>Amount</h3>}
-                    component={renderField}
-                    name="value"
-                    value={envelopeValue}
-                    onChange={e => setEnvelopeValue(e.target.value)}
-                    validate={composeValidators(currency, required)}
-                  />
-                  <button type="submit" disabled={submitting || pristine || !selectedEnvToAdd || !selectedEnvToSubtract}>
-                    Submit
-                  </button>
-                  <button type="button" onClick={() => isTransfering(false)}>
-                    Cancel
-                  </button>
-                </div>
-              </form>
-            )}
-          </Form>
-        </Modal>
-      )
-      else return null
+    if (transacting)  return (
+      <TransactionModal 
+        selected={selected}
+        handleChange={handleChange}
+        envelopeNames={envelopeNames}
+        envelopeValue={envelopeValue}
+        setEnvelopeValue={setEnvelopeValue}
+        mergeEnvelopeChanges={mergeEnvelopeChanges}
+        transacting={transacting}
+        isTransacting={isTransacting}
+        isUnallocated={isUnallocated}
+        unallocated={unallocated}
+        envelopes={envelopes}
+      />
+    ) 
+    else if (transfering) return (
+      <TransferModal
+        selectedEnvToAdd={selectedEnvToAdd}
+        handleEnvToAdd={handleEnvToAdd}
+        selectedEnvToSubtract={selectedEnvToSubtract}
+        handleEnvToSubtract={handleEnvToSubtract}
+        envelopeNames={envelopeNames}
+        transferFundsChanges={transferFundsChanges}
+        isTransfering={isTransfering}
+        transfering={transfering}
+        setEnvelopeValue={setEnvelopeValue}
+        isUnallocated={isUnallocated}
+        unallocated={unallocated}
+        envelopes={envelopes}
+        envelopeValue={envelopeValue}
+      />
+    )
+    else return null
   }
 
   return (

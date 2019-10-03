@@ -3,17 +3,13 @@ import {connect} from 'react-redux';
 import {Form, Field} from 'react-final-form';
 import {required, composeValidators, currency } from '../../utils/formValidators';
 import * as envelopeActions from '../../store/actions/evelope';
-import Modal from 'react-modal'
 import {toast} from 'react-toastify';
 import './Income.scss'
-
-// Modal.defaultStyles.overlay.color = 'gray';
-// Modal.defaultStyles.overlay.background = 'gray';
+import IncomeModal from './IncomeModal';
 
 const renderField = ({
   input,
   label,
-  type,
   placeholder,
   meta: { touched, error, warning }
 }) => (
@@ -27,17 +23,6 @@ const renderField = ({
     </div>
   </div>
 )
-
-// const modalStyles = {
-//   content : {
-//     transition: 'bottom 1s ease-out',
-//     transform: 'translate(-50%, -50%)',
-//     top: '50%',
-//     left: '50%',
-//     right: 'auto',
-//     bottom: 'auto'
-//   }
-// };
 
 let incomeOverageMessage = ""
 
@@ -122,7 +107,7 @@ const Income = ({
   const retrieveEnvelopes = () => {
     
     let envelopesArray = Object.entries(envelopes);
-    const renderEnvelopes = envelopesArray.map((envelopeInfo, index) => (
+    const renderEnvelopes = envelopesArray.map((envelopeInfo) => (
         <div key={envelopeInfo[0]}>
           <Field 
             name={envelopeInfo[0]}
@@ -137,10 +122,6 @@ const Income = ({
     return renderEnvelopes;
   }
 
-  // const displayIncomeAmount = (amount) => {
-  //   setIncomeAmount(amount);
-  // }
-
   return (
     <div className="incomeForm">
       <h2>Add Income Source</h2>
@@ -149,7 +130,7 @@ const Income = ({
       onSubmit={values => {
         assignIncomeAmount(values.incomeAmount) 
       }}>
-        {({handleSubmit, pristine, form, submitting, incomeSource, setIncomeSource}) => (
+        {({handleSubmit, pristine, submitting, incomeSource, setIncomeSource}) => (
           <form onSubmit={handleSubmit}>
             <div>
               <Field
@@ -178,34 +159,14 @@ const Income = ({
           </form>
         )}
       </Form>
-      <Modal
-      ariaHideApp={false}
-      isOpen={modalIsOpen}
-      onRequestClose={closeModal}
-      
-      contentLabel="Edit Envelope"
-      >
-        <h3>Plan your finances</h3>
-        <hr/>
-        <h4>Decide where you'll spend your money</h4>
-        Current income: {incomeAmount}
-        <p>
-          {incomeOverageMessage}
-        </p>
-        <Form 
-        onSubmit={(values) => {
-          incomeOverageValidator(values) 
-        }}>
-          {({handleSubmit, pristine, submitting, form}) => (
-            <form onSubmit={handleSubmit}>
-              <div>
-                {retrieveEnvelopes()}
-                <button type="submit" disabled={submitting} >Submit</button>
-              </div>
-            </form>
-          )}
-        </Form>
-      </Modal>
+      <IncomeModal
+        modalIsOpen={modalIsOpen}
+        closeModal={closeModal}
+        incomeAmount={incomeAmount}
+        incomeOverageMessage={incomeOverageMessage}
+        incomeOverageValidator={incomeOverageValidator}
+        retrieveEnvelopes={retrieveEnvelopes}
+      />
     </div>
   )
 }
