@@ -16,3 +16,9 @@
 
 ![image](https://user-images.githubusercontent.com/43661059/65467604-73d5e800-de27-11e9-9ff7-81025cd5759c.png)
 
+## Register with password salt and hash, token stored in cookies
+![image](https://user-images.githubusercontent.com/43661059/66359653-90047980-e93d-11e9-8f1a-03e941c6c91f.png)
+
+## Protected routes to prevent unauthorized access
+![image](https://user-images.githubusercontent.com/43661059/66359723-d1952480-e93d-11e9-9727-0438fc436c88.png)
+![image](https://user-images.githubusercontent.com/43661059/66359738-de197d00-e93d-11e9-9a53-dfdf42228c50.png)
